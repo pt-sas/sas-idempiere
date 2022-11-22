@@ -1,0 +1,11 @@
+UPDATE AD_Reference SET AD_Client_ID = 1000001 WHERE AD_Reference_ID = 550082
+;
+
+UPDATE AD_Ref_List SET AD_Client_ID = 1000001 WHERE AD_Reference_ID = 550082
+;
+
+UPDATE AD_Reference SET AD_Client_ID = 1000001 WHERE AD_Reference_ID = 550080
+;
+
+UPDATE AD_Ref_List SET AD_Client_ID = 1000001 WHERE AD_Reference_ID = 550080
+;

@@ -1,0 +1,12 @@
+-- Apr 4, 2013 10:41:56 AM WIT
+--  
+UPDATE AD_Process SET IsReport='Y',Updated=TO_TIMESTAMP('2013-04-04 10:41:56','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Process_ID=1000009
+;
+
+-- Apr 4, 2013 10:42:22 AM WIT
+--  
+UPDATE AD_Tab SET AD_Process_ID=1000009,Updated=TO_TIMESTAMP('2013-04-04 10:42:22','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Tab_ID=200007
+;
+
+SELECT register_migration_script('201304041043-AWN-104-.sql') FROM dual
+;

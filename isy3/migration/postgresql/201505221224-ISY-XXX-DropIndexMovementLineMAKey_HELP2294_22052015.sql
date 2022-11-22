@@ -1,0 +1,2 @@
+DROP INDEX M_MOVEMENTLINEMA_KEY;SELECT register_migration_script('201505221224-ISY-XXX-DropIndexMovementLineMAKey_HELP2294_22052015.sql') FROM dual
+;

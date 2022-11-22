@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ShipmentNotInvoiced" language="groovy" pageWidth="800" pageHeight="842" columnWidth="760" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="31181ad8-5d26-4428-bdfb-7ce251da11b8">
+	<property name="ireport.zoom" value="1.0000000000000004"/>
+	<property name="ireport.x" value="21"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" fontSize="10">
+		<box leftPadding="2"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Center" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="0">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Group" hAlign="Left" vAlign="Middle" fontSize="12" isBold="true">
+		<box leftPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Qty" hAlign="Right" vAlign="Middle" pattern="#,##0" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Amt" hAlign="Right" vAlign="Middle" pattern="#,##0.00" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="DateInvoiced" class="java.util.Date"/>
+	<parameter name="MovementDate1" class="java.util.Date"/>
+	<parameter name="MovementDate2" class="java.util.Date"/>
+	<parameter name="C_BPartner_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AD_CLIENT_ID" class="java.lang.Integer"/>
+	<parameter name="AD_Org_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_DocType_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_Activity_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Record_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	io.MovementDate,
+	io.DocumentNo,
+	parse('M_Product',iol.M_Product_ID,1) PRODUCT_NAME,
+	parse('M_Product',iol.M_Product_ID,0) PRODUCT_CODE,
+	iol.MovementQty,
+	ol.PriceEntered,
+	(iol.MovementQty * COALESCE(ol.PriceEntered,0)) Total,
+	pl.PlannedPrice AS COST,
+	pl.PlannedPrice * iol.MovementQty AS TOTALLINES,
+	parse('AD_Org',iol.AD_Org_ID,1) AS ORG,
+	parse('C_Activity',COALESCE(iol.C_Activity_ID,io.C_Activity_ID),1) AS ACTIVITY,
+	parse('C_DocType',io.C_DocType_ID,1) AS DOCTYPE,
+	parse('C_BPartner',io.C_BPartner_ID,1) BP_NAME,
+	(SELECT c.CurrentCostPrice FROM M_Cost c WHERE c.M_Product_ID = iol.M_Product_ID AND c.M_CostElement_ID = 1000001) STD_COST,
+	parse('AD_Org',iol.AD_OrgTrx_ID,1) AS ORGTRX,
+	(select ev.Name from C_ElementValue ev where ev.C_ElementValue_ID = io.User1_ID) COSTCENTER
+FROM M_InOut io
+INNER JOIN M_InOutLine iol ON (iol.M_InOut_ID = io.M_InOut_ID)
+INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = iol.C_OrderLine_ID)
+INNER JOIN C_Order o ON (o.C_Order_ID = ol.C_Order_ID)
+INNER JOIN C_DocType dt ON (dt.C_DocType_ID = o.C_DocTypeTarget_ID)
+LEFT JOIN C_ProjectLine pl ON (pl.M_Product_ID = iol.M_Product_ID AND pl.C_Project_ID = COALESCE(iol.C_Project_ID,io.C_Project_ID))
+WHERE	1 = 1
+	AND io.AD_Client_ID = $P{AD_CLIENT_ID}
+	AND io.IsSOTrx = 'Y'
+	AND NOT EXISTS(SELECT 1 FROM C_InvoiceLine il INNER JOIN C_Invoice i ON (i.C_Invoice_ID = il.C_Invoice_ID) WHERE il.M_InOutLine_ID = iol.M_InOutLine_ID AND i.DocStatus IN ('CO','CL'))
+	AND io.DocStatus IN ('CO','CL')
+	AND dt.IsInternal = 'N'
+	AND io.MovementDate >= COALESCE($P{MovementDate1},io.MovementDate)
+	AND io.MovementDate < ADDDAYS(COALESCE($P{MovementDate2},io.MovementDate),1)
+	AND iol.AD_Org_ID = COALESCE($P{AD_Org_ID},iol.AD_Org_ID)
+	AND io.C_DocType_ID = COALESCE($P{C_DocType_ID},io.C_DocType_ID)
+	AND COALESCE(iol.C_Activity_ID,io.C_Activity_ID,0) = COALESCE($P{C_Activity_ID},iol.C_Activity_ID,io.C_Activity_ID,0)
+	AND io.C_BPartner_ID = COALESCE($P{C_BPartner_ID},io.C_BPartner_ID)
+UNION
+
+SELECT
+	io.MovementDate,
+	io.DocumentNo,
+	parse('M_Product',iol.M_Product_ID,1) PRODUCT_NAME,
+	parse('M_Product',iol.M_Product_ID,0) PRODUCT_CODE,
+	iol.MovementQty,
+	ol.PriceEntered,
+	(iol.MovementQty * COALESCE(ol.PriceEntered,0)) Total,
+	pl.PlannedPrice AS COST,
+	pl.PlannedPrice * iol.MovementQty AS TOTALLINES,
+	parse('AD_Org',iol.AD_Org_ID,1) AS ORG,
+	parse('C_Activity',COALESCE(iol.C_Activity_ID,io.C_Activity_ID),1) AS ACTIVITY,
+	parse('C_DocType',io.C_DocType_ID,1) AS DOCTYPE,
+	parse('C_BPartner',io.C_BPartner_ID,1) BP_NAME,
+	(SELECT c.CurrentCostPrice FROM M_Cost c WHERE c.M_Product_ID = iol.M_Product_ID AND c.M_CostElement_ID = 1000001) STD_COST,
+	parse('AD_Org',iol.AD_OrgTrx_ID,1) AS ORGTRX,
+	(select ev.Name from C_ElementValue ev where ev.C_ElementValue_ID = io.User1_ID) COSTCENTER
+FROM M_InOut io
+INNER JOIN M_InOutLine iol ON (iol.M_InOut_ID = io.M_InOut_ID)
+INNER JOIN C_OrderLine ol ON (ol.C_OrderLine_ID = iol.C_OrderLine_ID)
+INNER JOIN C_Order o ON (o.C_Order_ID = ol.C_Order_ID)
+INNER JOIN C_DocType dt ON (dt.C_DocType_ID = o.C_DocTypeTarget_ID)
+INNER JOIN C_InvoiceLine il ON (il.M_InOutLine_ID = iol.M_InOutLine_ID)
+INNER JOIN C_Invoice i ON (i.C_Invoice_ID = il.C_Invoice_ID)
+LEFT JOIN C_ProjectLine pl ON (pl.M_Product_ID = iol.M_Product_ID AND pl.C_Project_ID = COALESCE(iol.C_Project_ID,io.C_Project_ID))
+WHERE	1 = 1
+	AND io.AD_Client_ID = COALESCE($P{AD_CLIENT_ID},$P{Record_ID})
+	AND io.IsSOTrx = 'Y'
+	AND io.DocStatus IN ('CO','CL')
+	AND i.DocStatus IN ('CO','CL')
+	AND dt.IsInternal = 'N'
+	AND i.DateInvoiced = COALESCE($P{DateInvoiced},i.DateInvoiced)
+	AND io.MovementDate >= COALESCE($P{MovementDate1},io.MovementDate)
+	AND io.MovementDate < ADDDAYS(COALESCE($P{MovementDate2},io.MovementDate),1)
+	AND iol.AD_Org_ID = COALESCE($P{AD_Org_ID},iol.AD_Org_ID)
+	AND io.C_DocType_ID = COALESCE($P{C_DocType_ID},io.C_DocType_ID)
+	AND COALESCE(iol.C_Activity_ID,io.C_Activity_ID,0) = COALESCE($P{C_Activity_ID},iol.C_Activity_ID,io.C_Activity_ID,0)
+	AND io.C_BPartner_ID = COALESCE($P{C_BPartner_ID},io.C_BPartner_ID)
+	AND $P{DateInvoiced} IS NOT NULL]]>
+	</queryString>
+	<field name="MOVEMENTDATE" class="java.sql.Timestamp"/>
+	<field name="DOCUMENTNO" class="java.lang.String"/>
+	<field name="PRODUCT_NAME" class="java.lang.String"/>
+	<field name="PRODUCT_CODE" class="java.lang.String"/>
+	<field name="MOVEMENTQTY" class="java.math.BigDecimal"/>
+	<field name="PRICEENTERED" class="java.math.BigDecimal"/>
+	<field name="TOTAL" class="java.math.BigDecimal"/>
+	<field name="COST" class="java.math.BigDecimal"/>
+	<field name="TOTALLINES" class="java.math.BigDecimal"/>
+	<field name="ORG" class="java.lang.String"/>
+	<field name="ACTIVITY" class="java.lang.String"/>
+	<field name="DOCTYPE" class="java.lang.String"/>
+	<field name="BP_NAME" class="java.lang.String"/>
+	<field name="STD_COST" class="java.math.BigDecimal"/>
+	<field name="ORGTRX" class="java.lang.String"/>
+	<field name="COSTCENTER" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="114" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="805a07c7-8554-4232-9468-d0e3dd36fa21" style="Title" x="10" y="10" width="750" height="44"/>
+				<textElement/>
+				<text><![CDATA[Shipment Not Invoiced]]></text>
+			</staticText>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement uuid="141b8c3e-a75d-48e5-ae8d-14fbabbffb2a" x="115" y="65" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{MovementDate1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement uuid="73c73d45-fdb8-4b16-a402-7c19e49bbca5" x="236" y="65" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{MovementDate2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="3c6caa75-6339-4788-b84d-a45f99315a3b" x="115" y="89" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{DateInvoiced}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="11a83f3a-2783-4bf5-acc6-1dab580bc820" x="11" y="65" width="94" height="20"/>
+				<textElement/>
+				<text><![CDATA[Movement Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="578d896d-4f72-41e9-bbf8-1f2178abb4d2" x="11" y="89" width="94" height="20"/>
+				<textElement/>
+				<text><![CDATA[Invoice Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="63cad0ed-af1a-4d6d-bb43-ba208b4a1d2f" x="105" y="89" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1d4e50dd-13c3-4d13-a44d-ccf9076f3b9b" x="105" y="65" width="10" height="20"/>
+				<textElement/>
+				<text><![CDATA[ : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24844872-babf-4ddd-8a96-cdc95649587b" x="214" y="65" width="22" height="20"/>
+				<textElement/>
+				<text><![CDATA[s/d]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ae0ab602-bfc2-48ac-9154-9fc93eceeed0" stretchType="RelativeToBandHeight" x="3" y="0" width="54" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Move Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fee00984-838c-4047-b5c6-96062e431965" stretchType="RelativeToBandHeight" x="57" y="0" width="67" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Shipment No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="de85e197-839a-4163-a934-7aedcb2e2437" stretchType="RelativeToBandHeight" x="368" y="0" width="71" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Product Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e2c7640-037c-4273-840e-e10dac081b0a" stretchType="RelativeToBandHeight" x="439" y="0" width="118" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Product Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e05f8dbc-59e9-461e-a03b-bdf112e16a19" stretchType="RelativeToBandHeight" x="607" y="0" width="66" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Std Cost Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9fe1c644-6936-41a3-9e2f-6267eb5e73ac" stretchType="RelativeToBandHeight" x="673" y="0" width="87" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bd8a8c4e-0573-4639-8ee4-d448ac93dd06" x="124" y="0" width="96" height="20"/>
+				<box leftPadding="2">
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Business Partner]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="65f522d5-2628-4b98-8edd-5faa623eeaf9" stretchType="RelativeToBandHeight" x="557" y="0" width="50" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e2c7640-037c-4273-840e-e10dac081b0a" stretchType="RelativeToBandHeight" x="220" y="0" width="63" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[TRX ORG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e2c7640-037c-4273-840e-e10dac081b0a" stretchType="RelativeToBandHeight" x="283" y="0" width="85" height="20"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Cost Center]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="d39b0e19-74c7-4915-ab24-69f9f8d0aa48" stretchType="RelativeToBandHeight" x="3" y="0" width="54" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MOVEMENTDATE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8b3bf1e1-fe98-438f-9adf-b1fde8018212" stretchType="RelativeToBandHeight" x="57" y="0" width="67" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DOCUMENTNO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c7b7a7a3-e1f8-45fb-b2fd-39063e268c79" stretchType="RelativeToBandHeight" x="368" y="0" width="71" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRODUCT_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="42f8d382-3029-403d-8927-e7e00a03301e" stretchType="RelativeToBandHeight" x="439" y="0" width="118" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{PRODUCT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="aa93aba7-27c7-4f9d-91e9-94fa63c0afad" stretchType="RelativeToBandHeight" x="607" y="0" width="66" height="13"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_COST}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="8eec7ca0-09a0-4dfd-b841-262be89c688e" stretchType="RelativeToBandHeight" x="673" y="0" width="87" height="13"/>
+				<box leftPadding="2" rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{STD_COST}.multiply($F{MOVEMENTQTY})]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fcd38835-4547-4b71-a684-8087e6b5d997" x="124" y="0" width="96" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{BP_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="73b24b39-7a9d-49df-b7aa-a3eeb6d4774a" stretchType="RelativeToBandHeight" x="557" y="0" width="50" height="13"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MOVEMENTQTY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c7b7a7a3-e1f8-45fb-b2fd-39063e268c79" stretchType="RelativeToBandHeight" x="220" y="0" width="63" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ORGTRX}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="c7b7a7a3-e1f8-45fb-b2fd-39063e268c79" stretchType="RelativeToBandHeight" x="283" y="2" width="85" height="13"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COSTCENTER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="16" splitType="Stretch"/>
+	</summary>
+</jasperReport>

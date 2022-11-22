@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="id.co.databiz.awn.test.CalloutOrderBPartner"
+         name="Callout Order BPartner"
+         point="org.adempiere.base.IColumnCallout">
+      <callout
+            class="id.co.databiz.awn.test.CalloutOrderBPartner"
+            columnName="C_BPartner_ID"
+            tableName="C_Order">
+      </callout>
+   </extension>
+   <extension
+         id="id.co.databiz.awn.test.CalloutRequisition"
+         name="CalloutRequisition"
+         point="org.compiere.model.Callout">
+      <callout
+            class="id.co.databiz.awn.test.CalloutRequisition">
+      </callout>
+   </extension>
+   <extension
+         id="id.co.databiz.awn.test.ModelFactory"
+         point="org.adempiere.base.IModelFactory">
+      <factory
+            class="id.co.databiz.awn.test.ModelFactory">
+      </factory>
+   </extension>
+   <extension
+         id="id.co.databiz.awn.test.DocFactory"
+         point="org.adempiere.base.IDocFactory">
+      <factory
+            class="id.co.databiz.awn.test.DocFactory"
+            gaap="*">
+      </factory>
+   </extension>
+   <extension
+         id="id.co.databiz.awn.test.AWNModelValidator"
+         name="AWN Model Validator"
+         point="org.adempiere.base.ModelValidator">
+      <listener
+            class="id.co.databiz.awn.test.AWNModelValidator">
+      </listener>
+   </extension>
+   <extension
+         id="org.compiere.process.RoleAccessUpdate"
+         name="Role Access Update"
+         point="org.adempiere.base.Process">
+      <process
+            class="id.co.databiz.awn.test.RoleAccessUpdate">
+      </process>
+   </extension>
+   <extension
+         id="org.compiere.apps.form.VAllocation"
+         name="Allocation"
+         point="org.adempiere.apps.Form">
+      <form
+            class="id.co.databiz.awn.test.VAllocation"
+            priority="1000">
+      </form>
+   </extension>
+   <extension
+         id="org.compiere.apps.form.VAllocation"
+         name="WAllocation Form"
+         point="org.adempiere.webui.Form">
+      <form
+            class="id.co.databiz.awn.test.WAllocation">
+      </form>
+   </extension>
+
+</plugin>

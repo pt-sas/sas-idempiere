@@ -1,0 +1,32 @@
+-- Jul 13, 2016 9:17:06 PM WIT
+--  
+UPDATE AD_WF_Node SET AD_WF_Responsible_ID=550188,Updated=TO_TIMESTAMP('2016-07-13 21:17:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_ID=550122
+;
+
+-- Jul 13, 2016 9:48:14 PM WIT
+--  
+UPDATE AD_WF_NodeNext SET IsActive='N',Updated=TO_TIMESTAMP('2016-07-13 21:48:14','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_NodeNext_ID=550162
+;
+
+-- Jul 13, 2016 9:48:30 PM WIT
+--  
+UPDATE AD_WF_NodeNext SET IsActive='N',Updated=TO_TIMESTAMP('2016-07-13 21:48:30','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_NodeNext_ID=550187
+;
+
+-- Jul 13, 2016 9:48:40 PM WIT
+--  
+UPDATE AD_WF_NodeNext SET IsActive='N',Updated=TO_TIMESTAMP('2016-07-13 21:48:40','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_NodeNext_ID=550186
+;
+
+-- Jul 13, 2016 9:48:53 PM WIT
+--  
+UPDATE AD_WF_NodeNext SET IsActive='N',Updated=TO_TIMESTAMP('2016-07-13 21:48:53','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_NodeNext_ID=550185
+;
+
+-- Jul 13, 2016 9:52:10 PM WIT
+--  
+UPDATE AD_WF_NodeNext SET SeqNo=10,Updated=TO_TIMESTAMP('2016-07-13 21:52:10','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_NodeNext_ID=550179
+;
+
+SELECT register_migration_script('201607132203-SAS-18-edit_wf_transition_urgent-price.sql') FROM dual
+;

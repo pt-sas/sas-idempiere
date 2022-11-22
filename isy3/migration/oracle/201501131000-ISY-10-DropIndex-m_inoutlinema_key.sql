@@ -1,0 +1,1 @@
+DROP INDEX m_inoutlinema_key;

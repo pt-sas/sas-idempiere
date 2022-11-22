@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="id.co.databiz.awn.ui.swing"
+      label="AWN Swing Feature"
+      version="3.1.0.qualifier"
+      provider-name="PT. Inovasi Databiz">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <includes
+         id="id.co.databiz.awn.base"
+         version="0.0.0"/>
+
+   <requires>
+      <import plugin="org.adempiere.ui.swing"/>
+   </requires>
+
+   <plugin
+         id="org.adempiere.ui.swing-fragment"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+</feature>

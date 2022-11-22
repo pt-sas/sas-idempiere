@@ -1,0 +1,22 @@
+-- Aug 10, 2016 10:16:30 AM WIT
+--  
+UPDATE M_Locator SET Remote_Org_ID=1000003,Updated=TO_DATE('2016-08-10 10:16:30','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE M_Locator_ID=1000005
+;
+
+-- Aug 10, 2016 10:16:44 AM WIT
+--  
+UPDATE M_Locator SET Remote_Org_ID=1000004,Updated=TO_DATE('2016-08-10 10:16:44','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE M_Locator_ID=1000006
+;
+
+-- Aug 10, 2016 10:16:51 AM WIT
+--  
+UPDATE M_Locator SET Remote_Org_ID=1000001,Updated=TO_DATE('2016-08-10 10:16:51','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE M_Locator_ID=1000003
+;
+
+-- Aug 10, 2016 10:16:58 AM WIT
+--  
+UPDATE M_Locator SET Remote_Org_ID=1000002,Updated=TO_DATE('2016-08-10 10:16:58','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE M_Locator_ID=1000004
+;
+
+SELECT register_migration_script('201608101018-SAS-12-SetRemoteOrgLocatorInTransit.sql') FROM dual
+;

@@ -1,0 +1,27 @@
+-- Mar 8, 2018 5:51:11 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550115,Updated=TO_DATE('2018-03-08 17:51:11','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=1350
+;
+
+-- Mar 8, 2018 5:52:02 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_DATE('2018-03-08 17:52:02','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=5760
+;
+
+-- Mar 8, 2018 5:52:43 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_DATE('2018-03-08 17:52:43','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=1350
+;
+
+-- Mar 8, 2018 5:55:36 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_DATE('2018-03-08 17:55:36','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=8726
+;
+
+-- Mar 8, 2018 5:56:22 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_DATE('2018-03-08 17:56:22','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=8887
+;
+
+SELECT register_migration_script('201803081757-ISY-84-Project_OrgValidation.sql') FROM dual
+;

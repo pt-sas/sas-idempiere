@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="JasperTemplate" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e59435f-be20-42c6-b273-6e8d3a0983b8">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="31"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.border" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.size.fix.enabled" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.3" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.5" value="pageFooter"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" fontSize="8">
+		<box leftPadding="2"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Center" fontName="SansSerif" fontSize="8" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="0">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="8" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" fontSize="8" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" fontSize="8" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Group" hAlign="Left" vAlign="Middle" fontSize="8" isBold="true">
+		<box leftPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Qty" hAlign="Right" vAlign="Middle" pattern="#,##0" fontSize="8" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Amt" hAlign="Right" vAlign="Middle" pattern="#,##0.00" fontSize="8" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="M_Requisition_ID1" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AD_User_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Product_ID1" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Warehouse_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateRequired1" class="java.util.Date">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateRequired2" class="java.util.Date">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Requisition_ID2" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Product_ID2" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_BPartner_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_Order_ID1" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_Order_ID2" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Product_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AD_Org_ID" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT x.*
+FROM
+(
+SELECT
+    r.DocumentNo PR_NO,
+    p.Name PRODUCT_NAME,
+    rl.Qty,
+    r.DateDoc,
+    COALESCE(rl.DateRequired,r.DateRequired) DATE_REQUIRED,
+    o.DocumentNo PO_NO,
+    bp.Name BP_NAME,
+    o.DateOrdered,
+    ol.QtyOrdered,
+	CASE WHEN io.DocumentNo IS NULL THEN '' ELSE io.DocumentNo END AS TPB_NO,
+    io.MovementDate,
+    ol.QtyDelivered,
+    iol.MovementQty,
+    io.DocStatus,
+    (ol.QtyOrdered - (SELECT SUM(iolx.MovementQty) FROM M_InOutLine iolx WHERE iolx.C_OrderLine_ID = ol.C_OrderLine_ID)) OpenQty,
+    ol.QtyReserved,
+    r.M_Requisition_ID,
+    rl.M_RequisitionLine_ID,
+    o.C_Order_ID,
+    ol.C_OrderLine_ID,
+    io.M_InOut_ID,
+    iol.M_InOutLine_ID,
+    rl.Line,
+    ol.Line OL_LINE
+
+FROM M_RequisitionLine rl
+INNER JOIN M_Requisition r ON (r.M_Requisition_ID = rl.M_Requisition_ID)
+INNER JOIN C_OrderLine ol ON (ol.M_RequisitionLine_ID = rl.M_RequisitionLine_ID)
+INNER JOIN C_Order o ON (o.C_Order_ID = ol.C_Order_ID)
+INNER JOIN M_Product p ON (p.M_Product_ID = rl.M_Product_ID)
+INNER JOIN C_BPartner bp ON (bp.C_BPartner_ID = ol.C_BPartner_ID)
+LEFT JOIN M_InOutLine iol ON (iol.C_OrderLine_ID = ol.C_OrderLine_ID)
+LEFT JOIN M_InOut io ON (io.M_InOut_ID = iol.M_InOut_ID)
+WHERE   1=1
+	AND r.DocumentNo >= CASE WHEN $P{M_Requisition_ID1} IS NULL THEN r.DocumentNo ELSE parse('M_Requisition',$P{M_Requisition_ID1},0) END
+	AND r.DocumentNo <= CASE WHEN $P{M_Requisition_ID2} IS NULL THEN r.DocumentNo ELSE parse('M_Requisition',$P{M_Requisition_ID2},0) END
+	AND r.M_Warehouse_ID = COALESCE($P{M_Warehouse_ID},r.M_Warehouse_ID)
+	AND r.AD_User_ID = COALESCE($P{AD_User_ID},r.AD_User_ID)
+	AND p.M_Product_ID = COALESCE($P{M_Product_ID},p.M_Product_ID)
+	AND p.Value >= CASE WHEN $P{M_Product_ID1} IS NULL THEN p.Value ELSE parse('M_Product',$P{M_Product_ID1},0) END
+	AND p.Value <= CASE WHEN $P{M_Product_ID2} IS NULL THEN p.Value ELSE parse('M_Product',$P{M_Product_ID2},0) END
+	AND COALESCE(rl.DateRequired,r.DateRequired) >= CASE WHEN $P{DateRequired1}::timestamp IS NULL THEN COALESCE(rl.DateRequired,r.DateRequired) ELSE $P{DateRequired1}::timestamp END
+	AND COALESCE(rl.DateRequired,r.DateRequired) <= CASE WHEN $P{DateRequired2}::timestamp IS NULL THEN COALESCE(rl.DateRequired,r.DateRequired) ELSE $P{DateRequired2}::timestamp END
+	AND bp.C_BPartner_ID = COALESCE($P{C_BPartner_ID},bp.C_BPartner_ID)
+	AND o.DocumentNo >= CASE WHEN $P{C_Order_ID1} IS NULL THEN o.DocumentNo ELSE parse('C_Order',$P{C_Order_ID1},0) END
+	AND o.DocumentNo <= CASE WHEN $P{C_Order_ID2} IS NULL THEN o.DocumentNo ELSE parse('C_Order',$P{C_Order_ID2},0) END
+	AND rl.AD_Org_ID = COALESCE($P{AD_Org_ID},rl.AD_Org_ID)
+--	AND ol.QtyReserved>0
+--	AND ol.QtyDelivered < rl.Qty
+	AND rl.Qty > (SELECT SUM(olr.QtyDelivered) FROM C_OrderLine olr WHERE olr.M_RequisitionLine_ID = rl.M_RequisitionLine_ID)
+
+UNION
+
+SELECT
+    r.DocumentNo PR_NO,
+    p.Name PRODUCT_NAME,
+    rl.Qty,
+    r.DateDoc,
+    COALESCE(rl.DateRequired,r.DateRequired) DATE_REQUIRED,
+    NULL PO_NO,
+    NULL BP_NAME,
+    NULL DateOrdered,
+    NULL QtyOrdered,
+    NULL TPB_NO,
+    NULL MovementDate,
+    NULL QtyDelivered,
+    NULL MovementQty,
+    NULL DocStatus,
+    NULL OpenQty,
+    NULL QtyReserved,
+    NULL M_Requisition_ID,
+    NULL M_RequisitionLine_ID,
+    NULL C_Order_ID,
+    NULL C_OrderLine_ID,
+    NULL M_InOut_ID,
+    NULL M_InOutLine_ID,
+    rl.Line,
+    NULL OL_LINE
+
+FROM M_RequisitionLine rl
+INNER JOIN M_Requisition r ON (r.M_Requisition_ID = rl.M_Requisition_ID)
+INNER JOIN M_Product p ON (p.M_Product_ID = rl.M_Product_ID)
+WHERE   1=1
+	AND r.AD_Client_ID=1000000
+	AND (NOT EXISTS(SELECT 1 FROM C_OrderLine ol WHERE ol.M_RequisitionLine_ID = rl.M_RequisitionLine_ID) OR rl.C_OrderLine_ID IS NULL)
+	AND r.DocumentNo >= CASE WHEN $P{M_Requisition_ID1} IS NULL THEN r.DocumentNo ELSE parse('M_Requisition',$P{M_Requisition_ID1},0) END
+	AND r.DocumentNo <= CASE WHEN $P{M_Requisition_ID2} IS NULL THEN r.DocumentNo ELSE parse('M_Requisition',$P{M_Requisition_ID2},0) END
+	AND r.M_Warehouse_ID = COALESCE($P{M_Warehouse_ID},r.M_Warehouse_ID)
+	AND r.AD_User_ID = COALESCE($P{AD_User_ID},r.AD_User_ID)
+	AND p.M_Product_ID = COALESCE($P{M_Product_ID},p.M_Product_ID)
+	AND p.Value >= CASE WHEN $P{M_Product_ID1} IS NULL THEN p.Value ELSE parse('M_Product',$P{M_Product_ID1},0) END
+	AND p.Value <= CASE WHEN $P{M_Product_ID2} IS NULL THEN p.Value ELSE parse('M_Product',$P{M_Product_ID2},0) END
+	AND COALESCE(rl.DateRequired,r.DateRequired) >= CASE WHEN $P{DateRequired1}::timestamp IS NULL THEN COALESCE(rl.DateRequired,r.DateRequired) ELSE $P{DateRequired1}::timestamp END
+	AND COALESCE(rl.DateRequired,r.DateRequired) <= CASE WHEN $P{DateRequired2}::timestamp IS NULL THEN COALESCE(rl.DateRequired,r.DateRequired) ELSE $P{DateRequired2}::timestamp END
+	AND rl.AD_Org_ID = COALESCE($P{AD_Org_ID},rl.AD_Org_ID)
+) x
+ORDER BY x.PR_NO,x.Line,x.PO_NO,x.Line,x.TPB_NO]]>
+	</queryString>
+	<field name="pr_no" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="qty" class="java.math.BigDecimal"/>
+	<field name="datedoc" class="java.sql.Timestamp"/>
+	<field name="date_required" class="java.sql.Timestamp"/>
+	<field name="po_no" class="java.lang.String"/>
+	<field name="bp_name" class="java.lang.String"/>
+	<field name="dateordered" class="java.sql.Timestamp"/>
+	<field name="qtyordered" class="java.math.BigDecimal"/>
+	<field name="tpb_no" class="java.lang.String"/>
+	<field name="movementdate" class="java.sql.Timestamp"/>
+	<field name="qtydelivered" class="java.math.BigDecimal"/>
+	<field name="movementqty" class="java.math.BigDecimal"/>
+	<field name="docstatus" class="java.lang.String"/>
+	<field name="openqty" class="java.math.BigDecimal"/>
+	<field name="qtyreserved" class="java.math.BigDecimal"/>
+	<field name="m_requisition_id" class="java.math.BigDecimal"/>
+	<field name="m_requisitionline_id" class="java.math.BigDecimal"/>
+	<field name="c_order_id" class="java.math.BigDecimal"/>
+	<field name="c_orderline_id" class="java.math.BigDecimal"/>
+	<field name="m_inout_id" class="java.math.BigDecimal"/>
+	<field name="m_inoutline_id" class="java.math.BigDecimal"/>
+	<field name="line" class="java.math.BigDecimal"/>
+	<field name="ol_line" class="java.math.BigDecimal"/>
+	<group name="REQUISITION">
+		<groupExpression><![CDATA[$F{m_requisition_id}]]></groupExpression>
+	</group>
+	<group name="REQUISITION_LINE">
+		<groupExpression><![CDATA[$F{m_requisitionline_id}]]></groupExpression>
+	</group>
+	<group name="ORDER">
+		<groupExpression><![CDATA[$F{c_order_id}]]></groupExpression>
+	</group>
+	<group name="ORDER_LINE">
+		<groupExpression><![CDATA[$F{c_orderline_id}]]></groupExpression>
+	</group>
+	<group name="SHIPMENT">
+		<groupExpression><![CDATA[$F{m_inout_id}]]></groupExpression>
+	</group>
+	<group name="SHIPMENT_LINE">
+		<groupExpression><![CDATA[$F{m_inoutline_id}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="137" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="248811cb-0947-4b5c-9233-2c3ab468ee88" style="Title" x="0" y="50" width="802" height="44"/>
+				<textElement/>
+				<text><![CDATA[Open Requisition]]></text>
+			</staticText>
+			<image scaleImage="RealSize" onErrorType="Blank">
+				<reportElement uuid="11b267ea-45f4-4583-aa86-1511dcc23ec1" mode="Transparent" x="0" y="0" width="177" height="50"/>
+				<imageExpression><![CDATA["customjasper/logo.png"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="84a5d6ce-d8a7-459d-97f8-731d8a69f342" style="Header" stretchType="RelativeToTallestObject" x="0" y="0" width="70" height="25"/>
+				<textElement/>
+				<text><![CDATA[Requisition No/Line]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="21f3f0de-2244-4afe-93bc-e41bfee10ea3" style="Header" stretchType="RelativeToTallestObject" x="70" y="0" width="80" height="25"/>
+				<textElement/>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fdf85fb4-ff81-4184-8774-00495e6b1827" style="Header" stretchType="RelativeToTallestObject" x="150" y="0" width="45" height="25"/>
+				<textElement/>
+				<text><![CDATA[Qty
+Required]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b6d9c0f-b71c-4d5b-862d-bbaefbf5e530" style="Header" stretchType="RelativeToTallestObject" x="195" y="0" width="55" height="25"/>
+				<textElement/>
+				<text><![CDATA[Document Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="979e1b86-83e4-44cf-8ecd-d2b1c00303e6" style="Header" stretchType="RelativeToTallestObject" x="250" y="0" width="55" height="25"/>
+				<textElement/>
+				<text><![CDATA[Date
+Required]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="513b1fb7-f209-4990-9992-2605a6ca64e1" style="Header" stretchType="RelativeToTallestObject" x="305" y="0" width="70" height="25"/>
+				<textElement/>
+				<text><![CDATA[PO No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f21ec04-bda2-4475-8707-99ed76419925" style="Header" stretchType="RelativeToTallestObject" x="375" y="0" width="80" height="25"/>
+				<textElement/>
+				<text><![CDATA[Vendor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d358896-4e6b-4761-bd9e-29e75d3048cd" style="Header" stretchType="RelativeToTallestObject" x="455" y="0" width="55" height="25"/>
+				<textElement/>
+				<text><![CDATA[PO Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8831857d-38d2-43dc-ad72-672f0ad248e8" style="Header" stretchType="RelativeToTallestObject" x="510" y="0" width="45" height="25"/>
+				<textElement/>
+				<text><![CDATA[Qty
+Ordered]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d0348b85-98f3-463c-b8ce-d8f95615c319" style="Header" stretchType="RelativeToTallestObject" x="555" y="0" width="80" height="25"/>
+				<textElement/>
+				<text><![CDATA[Material Receipt No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e735590b-803c-408a-a624-52f7ae2cd6b9" style="Header" stretchType="RelativeToTallestObject" x="635" y="0" width="55" height="25"/>
+				<textElement/>
+				<text><![CDATA[Received Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef9c34b0-4f5d-4c55-9bd2-0283b3f0b94e" style="Header" stretchType="RelativeToTallestObject" x="690" y="0" width="40" height="25"/>
+				<textElement/>
+				<text><![CDATA[Qty
+Delivered]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6415bb8b-2d6d-4620-be64-764854764a97" style="Header" stretchType="RelativeToTallestObject" x="730" y="0" width="40" height="25"/>
+				<textElement/>
+				<text><![CDATA[Open
+Qty PO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="72daed46-cf80-48f0-be3c-16e92ef9329f" style="Header" stretchType="RelativeToTallestObject" x="770" y="0" width="32" height="25"/>
+				<textElement/>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="e518d7c1-795d-4885-abd0-6113c461ab27" style="Detail" x="0" y="0" width="802" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8e11d9e6-36ee-40b7-bded-55576857bd1f" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="70" height="20" printWhenGroupChanges="REQUISITION_LINE"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{pr_no} + "/" + $F{line}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="55802019-e705-4b06-a293-cda6fab8cebc" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="70" y="0" width="80" height="20" printWhenGroupChanges="REQUISITION_LINE"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0665455b-e152-4572-aa6f-4db8c376cedc" style="Detail Qty" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="150" y="0" width="45" height="20" printWhenGroupChanges="REQUISITION_LINE"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="5fdd1819-93b4-42d7-810b-2a3a20678d78" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="195" y="0" width="55" height="20" printWhenGroupChanges="REQUISITION_LINE"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{datedoc}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="1c95192c-a096-4c80-ae2a-1f68e34a3881" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="250" y="0" width="55" height="20" printWhenGroupChanges="REQUISITION_LINE"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{date_required}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a5b87ca8-49fa-4006-9568-e46644725e8b" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="305" y="0" width="70" height="20" printWhenGroupChanges="ORDER"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{po_no}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="040dd10e-60ea-4774-af69-d769cb33c9f1" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="375" y="0" width="80" height="20" printWhenGroupChanges="ORDER_LINE"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="1afeaa53-a614-489a-be9f-0fa6f029f980" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="455" y="0" width="55" height="20" printWhenGroupChanges="ORDER"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dateordered}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0d798de8-1e0b-4d5a-9a5c-e4acb952857e" style="Detail Qty" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="510" y="0" width="45" height="20" printWhenGroupChanges="ORDER_LINE"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtyordered}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9b2ecdb1-5030-4e10-b70a-e059f144a570" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="555" y="0" width="80" height="20" printWhenGroupChanges="SHIPMENT"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{tpb_no}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd-MM-yyyy" isBlankWhenNull="true">
+				<reportElement uuid="af7cb406-d1ed-4437-af95-d4edcb44daf3" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="635" y="0" width="55" height="20" printWhenGroupChanges="SHIPMENT"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{movementdate}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a1730b83-cec0-4ee6-b1fa-76ade6941a7e" style="Detail" stretchType="RelativeToTallestObject" x="690" y="0" width="40" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{movementqty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f1439d49-78ef-4b92-acd4-09f222fe7e29" style="Detail Qty" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="730" y="0" width="40" height="20" printWhenGroupChanges="ORDER_LINE"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{openqty}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="f58839d2-37d5-466a-b80e-e7d445af9617" style="Detail" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="770" y="0" width="32" height="20" printWhenGroupChanges="SHIPMENT"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{docstatus}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="aee0b739-964e-4ddc-8b8d-995fafd36fc0" x="682" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="4658c088-8df9-45d6-86f1-0a5acb79c5c7" x="762" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="ce5df52a-4551-478c-a53e-1f7fcaf32f1c" x="0" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

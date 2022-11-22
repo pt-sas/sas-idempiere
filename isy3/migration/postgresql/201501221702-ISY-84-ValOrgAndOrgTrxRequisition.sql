@@ -1,0 +1,17 @@
+-- Jan 22, 2015 4:27:33 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550110,Updated=TO_TIMESTAMP('2015-01-22 16:27:33','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=550297
+;
+
+-- Jan 22, 2015 4:27:40 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_TIMESTAMP('2015-01-22 16:27:40','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=11469
+;
+
+-- Jan 22, 2015 4:27:58 PM WIT
+--  
+UPDATE AD_Column SET AD_Val_Rule_ID=550111,Updated=TO_TIMESTAMP('2015-01-22 16:27:58','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Column_ID=11494
+;
+
+SELECT register_migration_script('201501221702-ISY-84-ValOrgAndOrgTrxRequisition.sql') FROM dual
+;

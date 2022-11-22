@@ -1,0 +1,17 @@
+-- Jun 19, 2013 5:44:06 PM WIT
+--  
+UPDATE AD_Field SET SeqNoGrid=625,Updated=TO_TIMESTAMP('2013-06-19 17:44:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Field_ID=550248
+;
+
+-- Jun 19, 2013 5:49:24 PM WIT
+--  
+UPDATE AD_Field SET SeqNo=415, SeqNoGrid=405,Updated=TO_TIMESTAMP('2013-06-19 17:49:24','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Field_ID=550248
+;
+
+-- Jun 19, 2013 5:49:34 PM WIT
+--  
+UPDATE AD_Field SET AD_FieldGroup_ID=NULL,Updated=TO_TIMESTAMP('2013-06-19 17:49:34','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Field_ID=550248
+;
+
+SELECT register_migration_script('201306191752-AWN-235-rePosisiFieldEFTDate.sql') FROM dual
+;

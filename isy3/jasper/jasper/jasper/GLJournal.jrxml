@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GL Journal" pageWidth="612" pageHeight="396" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4ee9fad0-f238-4bef-930c-ac68b064f69a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" fontSize="10">
+		<box leftPadding="5"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Center" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="0">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Group" style="Default" hAlign="Left" vAlign="Middle" fontSize="12" isBold="true">
+		<box leftPadding="5">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Qty" style="Default" hAlign="Right" vAlign="Middle" pattern="#,##0" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Amt" style="Default" hAlign="Right" vAlign="Middle" pattern="#,##0.00" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
+	<parameter name="GL_Journal_ID" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT
+	j.DocumentNo,
+	j.DateDoc,
+	j.DateAcct,
+	parse('C_DocType',j.C_DocType_ID,1) DocType,
+	parse('C_Currency',j.C_Currency_ID,1) Currency,
+	j.Description,
+	j.Totaldr,
+	j.Totalcr,
+	parse('C_ElementValue',jl.Account_ID,0) AccountCode,
+	parse('C_ElementValue',jl.Account_ID,1) AccountName,
+	vc.Combination,
+	jl.AmtAcctDr,
+	jl.AmtAcctCr
+FROM GL_Journal j
+LEFT JOIN GL_JournalLine jl ON (jl.GL_Journal_ID = j.GL_Journal_ID)
+LEFT JOIN C_ValidCombination vc ON (vc.C_ValidCombination_ID = jl.C_ValidCombination_ID)
+WHERE j.GL_Journal_ID = COALESCE($P{RECORD_ID},$P{GL_Journal_ID})]]>
+	</queryString>
+	<field name="documentno" class="java.lang.String"/>
+	<field name="datedoc" class="java.sql.Timestamp"/>
+	<field name="dateacct" class="java.sql.Timestamp"/>
+	<field name="doctype" class="java.lang.String"/>
+	<field name="currency" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="totaldr" class="java.math.BigDecimal"/>
+	<field name="totalcr" class="java.math.BigDecimal"/>
+	<field name="accountcode" class="java.lang.String"/>
+	<field name="accountname" class="java.lang.String"/>
+	<field name="combination" class="java.lang.String"/>
+	<field name="amtacctdr" class="java.math.BigDecimal"/>
+	<field name="amtacctcr" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="106" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="83ecbc5e-2126-43ee-a813-3042b217860b" style="Title" x="0" y="0" width="555" height="44"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Journal Voucher]]></text>
+			</staticText>
+			<image scaleImage="RealSize" onErrorType="Blank">
+				<reportElement uuid="8e9144e7-71f6-4909-973a-786f23dd4685" mode="Transparent" x="0" y="0" width="177" height="44"/>
+				<imageExpression><![CDATA["http://erp:8090/jasper/logo.png"]]></imageExpression>
+			</image>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="435d7805-120b-47df-8f75-7672ea952484" x="120" y="49" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{datedoc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1a14d49b-6466-4ff5-a250-853b10f99e6f" x="445" y="49" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{documentno}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="30fb7279-1f92-4afb-9910-e6e1cc0be851" x="120" y="69" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dateacct}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8fe3890b-2bfb-46ee-bcd6-28f990ad57d9" x="445" y="69" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c6196a72-535d-4111-9bf5-b829edbfe7ed" x="435" y="49" width="10" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf6ea369-925f-4e70-a092-ff43e4a6d13b" x="435" y="69" width="10" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7cc6651c-230b-42b1-abc1-685e2167e6d5" x="110" y="49" width="10" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="10de8a73-5453-4d32-935a-6414054923a8" x="110" y="69" width="10" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3b3b2ce9-0b3c-452e-9351-c70bd95d4efb" x="17" y="49" width="93" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[Tanggal Doc]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="45bcd836-8493-42c9-8b03-1db2baa0c31a" x="17" y="69" width="93" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[Tanggal Posting]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9b8a9341-efd4-4367-86aa-8ac347942f1d" x="375" y="49" width="60" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[No.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c8f387b1-4b8a-476a-ace2-5544f21a72c7" x="375" y="69" width="60" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[Mata Uang]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="784e8cbb-0b90-4aa9-acf2-fb1f35bfde83" style="Header" x="0" y="0" width="86" height="20"/>
+				<textElement/>
+				<text><![CDATA[Account ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9365cadc-23ae-40c4-8286-81a5418422aa" style="Header" x="86" y="0" width="114" height="20"/>
+				<textElement/>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fb31e991-5e54-4d1f-9322-f43ceb160de1" style="Header" x="200" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Debet]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b214a512-a9c5-40d7-a9cc-8a86abb8f7f0" style="Header" x="300" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Credit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="26d12b6f-5c92-4b46-97a6-88850b3be1cc" style="Header" x="400" y="0" width="172" height="20"/>
+				<textElement/>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90c53909-2017-43d3-87e9-55bff7febcaa" x="-275" y="-89" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[amtacctdr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fc9a82da-8575-4053-b989-e6d7db36ebb5" x="-175" y="-146" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[amtacctcr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f575c645-7e7b-4dbc-b94a-ee7bf5292386" x="-197" y="-109" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[description]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="408c436c-0a0d-446b-a144-d322072aa256" x="0" y="0" width="86" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{accountcode}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="266c5be2-e01d-4486-a484-21a8244dcdf4" x="86" y="0" width="114" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{accountname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="220" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{amtacctdr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="c5768606-1db3-4316-bc93-e0137c395640" x="320" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{amtacctcr}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fa987ee4-32f5-4231-89a0-fac2b6d04fac" x="400" y="0" width="172" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="200" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="300" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{currency}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="47" splitType="Stretch">
+			<textField>
+				<reportElement uuid="11601880-d694-40e5-acca-de4538995833" x="435" y="23" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="true">
+				<reportElement uuid="e0f708ba-aa5b-4202-a89b-643f1424a918" x="515" y="23" width="40" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="e8884eb8-5875-41f7-92b5-53e39b3c4523" x="0" y="23" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="220" y="12" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{totaldr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="320" y="12" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{totalcr}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="7ab90679-26f1-480a-bf31-41069058f456" x="0" y="12" width="572" height="1"/>
+			</line>
+			<textField pattern="###0.00;(###0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="200" y="12" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{currency} + " " +$F{amtacctdr}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(-###0.00)" isBlankWhenNull="true">
+				<reportElement uuid="2bd92722-c66d-4e92-85b7-736a30b7b4b2" x="300" y="13" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{currency} + " " +$F{amtacctdr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

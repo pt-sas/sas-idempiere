@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LampiranInvoice" pageWidth="656" pageHeight="350" columnWidth="616" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="471bdd6a-8fe8-4612-b703-6afab98e7ebe">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="RECORD_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="C_Invoice_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	i.DocumentNo,
+	parse('M_Product',il.M_Product_ID,0) PRODUCT_CODE,
+	parse('M_Product',il.M_Product_ID,1) PRODUCT_NAME,
+	il.QtyEntered,
+	il.PriceActual,
+	il.LineNetAmt,
+	i.Description,
+	i.TotalLines,
+	i.GrandTotal,
+	il.PriceEntered,
+	il.PriceList,
+	parse('c_charge',il.c_charge_id,1) AS CHARGE,
+	i.C_DocTypeTarget_ID,
+	il.Description as INVLINE_DESCRIPTION,
+	coalesce(ol.Source_OrderLine_ID,0) as source_orderline_id,
+	il.c_charge_ID,
+	il.isdescription,
+	coalesce(p.M_Product_Category_ID,0) as M_Product_Category_ID,
+	(case when ol.source_orderline_id is null then
+	   (select coalesce(sum(
+	      case when ix.c_doctypetarget_id=1000002 or ix.c_doctypetarget_id=1000004 then
+		ilx.linenetamt/1.1
+	      else ilx.linenetamt end),0)
+	   from c_invoiceline ilx
+	   inner join c_invoice ix on (ix.c_invoice_id=ilx.c_invoice_id)
+	   inner join c_orderline olx on (olx.c_orderline_id=ilx.c_orderline_id)
+	   where olx.source_orderline_id=il.c_orderline_id)
+	 else 0
+	 end) as PAKET_AMOUNT,
+	 ol.m_promotion_id,
+	COALESCE(o.FLNStatus,'') AS FLNStatus,
+	i.IsDiscountPrinted,
+	il.qtyinvoiced
+FROM C_InvoiceLine il
+INNER JOIN C_Invoice i ON (i.C_Invoice_ID = il.C_Invoice_ID)
+LEFT JOIN C_Order o ON (o.C_Order_ID = i.C_Order_ID)
+LEFT JOIN C_OrderLine ol ON (ol.C_OrderLine_ID=il.C_OrderLine_ID)
+LEFT JOIN M_Product p ON (p.M_Product_ID=il.M_Product_ID)
+WHERE	1 = 1
+	AND i.C_Invoice_ID = COALESCE($P{RECORD_ID},$P{C_Invoice_ID})
+	AND p.M_Product_Category_ID<>1000017
+	AND il.M_Product_ID IS NOT NULL
+ORDER BY il.Line]]>
+	</queryString>
+	<field name="documentno" class="java.lang.String"/>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="qtyentered" class="java.math.BigDecimal"/>
+	<field name="priceactual" class="java.math.BigDecimal"/>
+	<field name="linenetamt" class="java.math.BigDecimal"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="totallines" class="java.math.BigDecimal"/>
+	<field name="grandtotal" class="java.math.BigDecimal"/>
+	<field name="priceentered" class="java.math.BigDecimal"/>
+	<field name="pricelist" class="java.math.BigDecimal"/>
+	<field name="charge" class="java.lang.String"/>
+	<field name="c_doctypetarget_id" class="java.math.BigDecimal"/>
+	<field name="invline_description" class="java.lang.String"/>
+	<field name="source_orderline_id" class="java.math.BigDecimal"/>
+	<field name="c_charge_id" class="java.math.BigDecimal"/>
+	<field name="isdescription" class="java.lang.String"/>
+	<field name="m_product_category_id" class="java.math.BigDecimal"/>
+	<field name="paket_amount" class="java.math.BigDecimal"/>
+	<field name="m_promotion_id" class="java.math.BigDecimal"/>
+	<field name="flnstatus" class="java.lang.String"/>
+	<field name="isdiscountprinted" class="java.lang.String"/>
+	<field name="qtyinvoiced" class="java.math.BigDecimal"/>
+	<variable name="NO_URUT" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{documentno}!=null?1:0]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="PRICELIST" class="java.math.BigDecimal" resetType="Column">
+		<variableExpression><![CDATA[($F{product_name}!=null & $F{m_product_category_id}.intValue()!=1000011)?
+    (($F{c_doctypetarget_id}.intValue()==1000002||$F{c_doctypetarget_id}.intValue()==1000004)?
+        $F{pricelist}.divide(new BigDecimal(1.1),2,java.math.RoundingMode.HALF_UP)
+        : $F{pricelist})
+    : new BigDecimal(0)]]></variableExpression>
+	</variable>
+	<variable name="DISCOUNT" class="java.math.BigDecimal" resetType="Column">
+		<variableExpression><![CDATA[($F{flnstatus}.equalsIgnoreCase( "Pengembalian Barang Retur" ) || $F{isdiscountprinted}.equalsIgnoreCase( "N" ) || $F{pricelist}.doubleValue()==0)?
+    new BigDecimal(0)
+: ((!$F{flnstatus}.equalsIgnoreCase( "Pengembalian Barang Retur" ) && $F{isdiscountprinted}.equalsIgnoreCase( "Y" ) && $F{pricelist}.doubleValue()>0) ?
+       ($F{pricelist}.multiply($F{qtyinvoiced})).subtract( $F{linenetamt} )
+  : ((!$F{flnstatus}.equalsIgnoreCase( "Pengembalian Barang Retur" ) && $F{isdiscountprinted}.equalsIgnoreCase( "Y" ) && $F{pricelist}.doubleValue()<0) ?
+            ($F{priceactual}.multiply($F{qtyinvoiced})).subtract( $F{linenetamt} )
+    : new BigDecimal(0)))]]></variableExpression>
+	</variable>
+	<variable name="DISCOUNT_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$V{DISCOUNT}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band height="310">
+			<image hAlign="Center" onErrorType="Blank">
+				<reportElement uuid="e9a04fd2-5641-4b66-bd14-a36040144e79" x="0" y="0" width="616" height="310"/>
+				<imageExpression><![CDATA["http://erp:8090/jasper/watermark.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="21" splitType="Stretch">
+			<line>
+				<reportElement uuid="5e9e5bc1-6c57-456a-80ab-cfcc1f2a6ece" x="0" y="20" width="616" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00 %" isBlankWhenNull="true">
+				<reportElement uuid="35e61e09-76bb-4a38-8fd4-e18e8dd52a15" x="386" y="0" width="70" height="15"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{m_promotion_id}==null?
+    ($F{pricelist}.doubleValue()>0?
+        (($F{pricelist}.subtract($F{priceentered})).abs()).divide($F{pricelist},2):0)
+:1]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="35e61e09-76bb-4a38-8fd4-e18e8dd52a15" x="306" y="0" width="70" height="15"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{paket_amount}.doubleValue()>0 ?
+$F{paket_amount}.divide($F{qtyentered},2,java.math.RoundingMode.HALF_UP)
+:$V{PRICELIST}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2533ac4f-86f6-4f12-bd53-2262ff23b787" x="34" y="0" width="203" height="15"/>
+				<box leftPadding="3">
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{product_code}!=null?$F{product_code}+" - "+$F{product_name}:
+$F{invline_description}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="55bf7931-aa05-4c88-a950-4f56d23aa695" x="466" y="0" width="150" height="15"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{DISCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="1d4bac10-2972-4979-a128-9f632158ea82" x="237" y="0" width="59" height="15"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{qtyentered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7347d541-5169-4386-98c2-914612b5b305" x="0" y="0" width="34" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{NO_URUT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="df02a435-13da-4dd7-9ecd-567940127d3e" x="456" y="0" width="10" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[=]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="df02a435-13da-4dd7-9ecd-567940127d3e" x="376" y="0" width="10" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[x]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="df02a435-13da-4dd7-9ecd-567940127d3e" x="296" y="0" width="10" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[x]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="95">
+			<staticText>
+				<reportElement uuid="756eed9b-fa62-4b99-9284-e3a8957aee68" x="406" y="52" width="145" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Note : Tidak untuk ditagih]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<summary>
+		<band height="30">
+			<line>
+				<reportElement uuid="16187530-754d-48d5-bca3-c6d6d56e8e73" x="0" y="0" width="616" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="#,##0" isBlankWhenNull="true">
+				<reportElement uuid="55bf7931-aa05-4c88-a950-4f56d23aa695" x="466" y="0" width="150" height="15"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{DISCOUNT_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="df02a435-13da-4dd7-9ecd-567940127d3e" x="456" y="0" width="10" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[=]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

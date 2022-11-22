@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Bank" language="groovy" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3fd5892d-bf21-4281-ac27-f76b83499906">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DateAcct" class="java.util.Date"/>
+	<parameter name="C_ConversionType_ID" class="java.lang.Integer"/>
+	<parameter name="AD_Org_ID" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+    b.name as bank,
+    ba.ACCOUNTNO as account,
+    cur.iso_code as cur,
+    sum(sb.AMTSOURCEDR - sb.AMTSOURCECR) as balance,
+    sum(sb.AMTACCTDR - sb.AMTACCTCR) as acctbalance,
+    max(CURRENCYRATE(sb.C_Currency_ID, 303, $P{DateAcct}, $P{C_ConversionType_ID}, sb.AD_Client_ID, sb.AD_Org_ID)) AS Rate
+from
+(
+SELECT
+    fa.ad_client_id,fa.ad_org_id,
+    fa.dateacct,
+    ba.C_BANKACCOUNT_ID,
+    ba.c_currency_id as sourcecur,
+    case when fa.c_currency_id = ba.c_currency_id then fa.amtsourcedr else 0 end as amtsourcedr,
+    case when fa.c_currency_id = ba.c_currency_id then fa.amtsourcecr else 0 end as amtsourcecr,
+    fa.c_currency_id,
+    fa.amtacctdr, --case when fa.c_currency_id = ba.c_currency_id then amtacctdr else 0 end as amtacctdr,
+    fa.amtacctcr --case when fa.c_currency_id = ba.c_currency_id then amtacctcr else 0 end as amtacctcr
+FROM C_BankAccount ba
+INNER JOIN C_BankAccount_Acct baa ON (baa.C_BankAccount_ID=ba.C_BankAccount_ID AND baa.C_AcctSchema_ID = 1000001)
+INNER JOIN C_ValidCombination vc ON (vc.C_ValidCombination_ID = baa.B_Asset_Acct)
+INNER JOIN Fact_Acct fa ON (fa.Account_ID = vc.Account_ID)
+WHERE fa.PostingType = 'A'
+AND fa.AD_Org_ID = COALESCE($P{AD_Org_ID},fa.AD_Org_ID)
+) sb
+inner join C_BANKaccount ba on ba.C_BANKaccount_ID = sb.C_BANKACCOUNT_ID
+inner join C_BANK b on b.c_bank_id = ba.C_BANK_ID
+inner join c_currency cur on cur.c_currency_id = sb.SOURCECUR
+where sb.DateAcct <= $P{DateAcct}
+group by b.name, ba.accountno,cur.iso_code
+order by b.name , ba.accountno]]>
+	</queryString>
+	<field name="BANK" class="java.lang.String"/>
+	<field name="ACCOUNT" class="java.lang.String"/>
+	<field name="CUR" class="java.lang.String"/>
+	<field name="BALANCE" class="java.math.BigDecimal"/>
+	<field name="ACCTBALANCE" class="java.math.BigDecimal"/>
+	<field name="RATE" class="java.math.BigDecimal"/>
+	<variable name="SOURCETTL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{BALANCE}.multiply($F{RATE})]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="DIFFTTL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SOURCETTL}.subtract($F{ACCTBALANCE})]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<pageHeader>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6011f091-2ad5-426f-ae6e-3107437ba1b7" x="161" y="0" width="251" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[REVAL BANK ACCOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fa72ab7a-0c4a-400b-8d32-ee2d01a8ea16" x="413" y="19" width="66" height="16"/>
+				<textElement/>
+				<text><![CDATA[Per Tanggal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="17bac7a2-e093-4712-a20f-e0170b4bc83e" x="481" y="20" width="91" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{DateAcct}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="32" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d4d8721f-5a28-4767-a866-3de71271a5b5" x="263" y="8" width="58" height="18"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[CUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69829644-2d25-430f-9327-c2321585db35" x="327" y="8" width="100" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="65342123-664f-4d4d-8762-e78bf0192c12" x="37" y="8" width="100" height="18"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[BANK]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="26ed14fa-f33b-4666-b1bd-e7b8bd402005" x="3" y="28" width="569" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="aaf870b8-8bd3-4482-ba2f-92108459e53e" x="155" y="8" width="100" height="18"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[ACCOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a9ccfede-2400-4324-96c8-e5ac66152ce1" x="450" y="8" width="100" height="18"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<text><![CDATA[ACCT - BALANCE]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="68" splitType="Stretch">
+			<textField>
+				<reportElement uuid="5003cd4f-243b-40be-aa44-81d47f1ba844" x="37" y="4" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{BANK}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e397d0bc-eef3-4cee-951d-bedced315e7d" x="155" y="4" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ACCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="df07d492-46b1-4abf-8dcd-b64d6bf6b095" x="263" y="4" width="58" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{CUR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="941f6c8c-b6f7-4abd-b25b-c56b46429547" x="327" y="4" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{BALANCE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="cb9af7cf-85fb-44ff-ace9-80086dfd1a1e" x="450" y="4" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{ACCTBALANCE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="890fd6ec-c284-4a8a-8d8c-6c20690dc701" x="327" y="24" width="100" height="20">
+					<printWhenExpression><![CDATA[$F{RATE}.compareTo( BigDecimal.valueOf(1) ) || $F{RATE} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{RATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="5fcc47b5-e48a-4607-9ab0-ffd11f349332" x="450" y="24" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{SOURCETTL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="468969e8-5e09-499b-9131-499bfc732ba6" x="450" y="43" width="100" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{DIFFTTL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="41b34192-fc44-43e0-9564-bf1f823f7277" x="263" y="24" width="58" height="20"/>
+				<textElement/>
+				<text><![CDATA[IDR RATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bf1a9d10-ab98-468c-8f20-068b56cb2173" x="263" y="44" width="164" height="20"/>
+				<textElement/>
+				<text><![CDATA[Different Amount]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="3f8aa358-42db-4070-8cc8-a237987a3664" x="0" y="62" width="572" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

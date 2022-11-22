@@ -1,0 +1,57 @@
+-- May 23, 2013 12:58:32 PM WIT
+--  
+UPDATE AD_Role SET Name='Role_ACC_MGR',Updated=TO_DATE('2013-05-23 12:58:32','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000088
+;
+
+-- May 23, 2013 12:59:32 PM WIT
+--  
+DELETE FROM AD_Role_Included WHERE AD_Role_ID=1000088 AND Included_Role_ID=1000082
+;
+
+-- May 23, 2013 1:13:08 PM WIT
+--  
+UPDATE AD_Role SET IsAccessAllOrgs='Y',Updated=TO_DATE('2013-05-23 13:13:08','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000088
+;
+
+-- May 23, 2013 1:14:01 PM WIT
+--  
+UPDATE AD_Role SET PreferenceType='U',Updated=TO_DATE('2013-05-23 13:14:01','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000088
+;
+
+-- May 23, 2013 1:18:44 PM WIT
+--  
+UPDATE AD_Role SET Name='Role_SuperUser',Updated=TO_DATE('2013-05-23 13:18:44','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000088
+;
+
+-- May 23, 2013 1:19:25 PM WIT
+--  
+UPDATE AD_Role SET Name='Role_ACC_MGR', PreferenceType='O',Updated=TO_DATE('2013-05-23 13:19:25','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000097
+;
+
+-- May 23, 2013 1:20:54 PM WIT
+--  
+UPDATE AD_Role SET IsPersonalLock='Y', IsUseUserOrgAccess='N',Updated=TO_DATE('2013-05-23 13:20:54','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000097
+;
+
+-- May 23, 2013 1:21:56 PM WIT
+--  
+UPDATE AD_Role SET IsPersonalAccess='Y',Updated=TO_DATE('2013-05-23 13:21:56','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000097
+;
+
+-- May 23, 2013 1:22:01 PM WIT
+--  
+UPDATE AD_Role SET PreferenceType='C',Updated=TO_DATE('2013-05-23 13:22:01','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000097
+;
+
+-- May 23, 2013 1:22:19 PM WIT
+--  
+UPDATE AD_Role SET IsActive='N',Updated=TO_DATE('2013-05-23 13:22:19','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000088
+;
+
+-- May 23, 2013 1:22:22 PM WIT
+--  
+UPDATE AD_Role SET IsActive='N',Updated=TO_DATE('2013-05-23 13:22:22','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=1000089
+;
+
+SELECT register_migration_script('201305231335-AWN-166-.sql') FROM dual
+;

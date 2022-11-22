@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SalesOrderFormSub" language="groovy" pageWidth="600" pageHeight="935" columnWidth="573" leftMargin="20" rightMargin="7" topMargin="12" bottomMargin="12" uuid="457937c2-820a-4601-95fc-12807db03812">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="148"/>
+	<property name="ireport.y" value="1086"/>
+	<property name="ireport.background.image" value="D:\Documents\jasper\MKL\SO 001.png"/>
+	<property name="ireport.background.image.properties" value="true,true,0.25,-6,-7,0,0,689,946"/>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
+	<parameter name="C_Order_ID" class="java.math.BigDecimal"/>
+	<parameter name="IS_DISPLAY_PRICE" class="java.lang.Boolean">
+		<defaultValueExpression><![CDATA[true]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    o.DateOrdered,
+    o.DocumentNo,
+    o.DatePromised,
+    o.C_DocTypeTarget_ID,
+    parse('C_BPartner',o.C_BPartner_ID,1) BP_NAME,
+    parse('C_Location',bpl.C_Location_ID,0) BP_LOCATION,
+    parse('C_DocType',o.C_DocTypeTarget_ID,1) DOC_TYPE,
+    o.POReference,
+    p.Name PRODUCT_NAME,
+    ol.QtyOrdered,
+    parse('C_UOM',ol.C_UOM_ID,1) UOM,
+    ol.PriceEntered,
+    parse('C_Tax',ol.C_Tax_ID,1) TAX,
+    parse('AD_Org',o.AD_Org_ID,1) ORG_NAME,
+    parse('C_Location',ori.C_Location_ID,1) ORG_LOCATION,
+    ori.Phone ORG_PHONE,
+    ori.Fax ORG_FAX,
+    p.Value PRODUCT_CODE,
+    ol.DatePromised LINE_DATEPROMISED,
+    parse('AD_User',o.AD_User_ID,1) AD_USER,
+    parse('C_Currency',o.C_Currency_ID,0) CURRENCY,
+    parse('AD_User',o.SalesRep_ID,1) SALESREP,
+    parse('C_PaymentTerm',o.C_PaymentTerm_ID,0) PAYMENTTERM,
+    parse('C_BPartner',o.C_BPartner_ID,0) BP_CODE,
+    pl.Name PRICELIST,
+    o.TotalLines,
+    o.GrandTotal,
+    o.Description,
+    parse('AD_User',o.DropShip_User_ID,1) DROPSHIP_USER,
+    parse('C_BPartner',o.DropShip_BPartner_ID,1) DROPSHIP_BP,
+    parse('C_BPartner_Location',o.DropShip_Location_ID,1) DROPSHIP_LOCATION,
+    getreflist('ALL','DOCSTATUS',o.DocStatus) DOCSTATUS,
+    parse('AD_User',o.UpdatedBy,1) UPDATEDBY,
+    ol.LineNetAmt,
+    ol.QtyEntered,
+    ol.QtyOrdered,
+    COALESCE((SELECT SUM(ot.TaxAmt) FROM C_OrderTax ot WHERE ot.C_Order_ID = ol.C_Order_ID),0) TaxAmt,
+	p.M_Product_Category_ID,
+	(SELECT COUNT(olx.C_OrderLine_ID) FROM C_OrderLine olx
+		INNER JOIN M_Product px ON (px.M_Product_ID = olx.M_Product_ID)
+		WHERE olx.C_Order_ID = o.C_Order_ID AND px.M_Product_Category_ID = 1000032) SYSTEM_COUNT
+FROM C_Order o
+INNER JOIN C_OrderLine ol ON (ol.C_Order_ID = o.C_Order_ID)
+LEFT JOIN M_Product p ON (p.M_Product_ID = ol.M_Product_ID)
+LEFT JOIN AD_OrgInfo ori ON (ori.AD_Org_ID = o.AD_Org_ID)
+LEFT JOIN M_PriceList pl ON (pl.M_PriceList_ID = o.M_PriceList_ID)
+LEFT JOIN C_BPartner_Location bpl ON (bpl.C_BPartner_Location_ID = o.C_BPartner_Location_ID)
+WHERE o.C_Order_ID = COALESCE($P{RECORD_ID},$P{C_Order_ID})
+ORDER BY ol.Line]]>
+	</queryString>
+	<field name="dateordered" class="java.sql.Timestamp"/>
+	<field name="documentno" class="java.lang.String"/>
+	<field name="datepromised" class="java.sql.Timestamp"/>
+	<field name="c_doctypetarget_id" class="java.math.BigDecimal"/>
+	<field name="bp_name" class="java.lang.String"/>
+	<field name="bp_location" class="java.lang.String"/>
+	<field name="doc_type" class="java.lang.String"/>
+	<field name="poreference" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="qtyordered" class="java.math.BigDecimal"/>
+	<field name="uom" class="java.lang.String"/>
+	<field name="priceentered" class="java.math.BigDecimal"/>
+	<field name="tax" class="java.lang.String"/>
+	<field name="org_name" class="java.lang.String"/>
+	<field name="org_location" class="java.lang.String"/>
+	<field name="org_phone" class="java.lang.String"/>
+	<field name="org_fax" class="java.lang.String"/>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="line_datepromised" class="java.sql.Timestamp"/>
+	<field name="ad_user" class="java.lang.String"/>
+	<field name="currency" class="java.lang.String"/>
+	<field name="salesrep" class="java.lang.String"/>
+	<field name="paymentterm" class="java.lang.String"/>
+	<field name="bp_code" class="java.lang.String"/>
+	<field name="pricelist" class="java.lang.String"/>
+	<field name="totallines" class="java.math.BigDecimal"/>
+	<field name="grandtotal" class="java.math.BigDecimal"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="dropship_user" class="java.lang.String"/>
+	<field name="dropship_bp" class="java.lang.String"/>
+	<field name="dropship_location" class="java.lang.String"/>
+	<field name="docstatus" class="java.lang.String"/>
+	<field name="updatedby" class="java.lang.String"/>
+	<field name="linenetamt" class="java.math.BigDecimal"/>
+	<field name="qtyentered" class="java.math.BigDecimal"/>
+	<field name="taxamt" class="java.math.BigDecimal"/>
+	<field name="m_product_category_id" class="java.math.BigDecimal"/>
+	<field name="system_count" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="275" splitType="Stretch">
+			<textField>
+				<reportElement uuid="22c60f93-2a2c-40a3-b928-d48eb9f997d4" x="14" y="102" width="281" height="41"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="524dfa72-413d-4ff1-8636-af905aac9e7a" stretchType="RelativeToBandHeight" x="14" y="178" width="281" height="42"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp_location}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="5981f65d-59a7-45df-a80f-f0997553100a" x="373" y="87" width="200" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dateordered}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="60fa5e2a-0fed-4d46-98f0-9d223a1fab1b" x="373" y="111" width="200" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{salesrep}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="4d56bf6e-3dd1-42f9-b5b5-2bfa8f02b636" x="441" y="161" width="132" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{datepromised}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4663a40b-21ca-4223-8ede-dbb0117c947f" x="442" y="186" width="132" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{paymentterm}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40a8483f-8d30-45f7-9a63-6455990958d0" x="321" y="25" width="218" height="20">
+					<printWhenExpression><![CDATA[$F{c_doctypetarget_id}==550158]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doc_type}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="443" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="bc554b1e-6afd-47d2-b2af-5e3cba06aebe" stretchType="RelativeToTallestObject" x="312" y="0" width="30" height="15"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{qtyentered}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="1294cec1-c947-4712-bc2e-7aa78f893cc6" stretchType="RelativeToTallestObject" x="350" y="0" width="97" height="15">
+					<printWhenExpression><![CDATA[$P{IS_DISPLAY_PRICE}]]></printWhenExpression>
+				</reportElement>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="96bd4b88-e28d-440e-8a7a-bb193c90c6cc" stretchType="RelativeToTallestObject" x="44" y="0" width="57" height="15"/>
+				<box leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{product_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3fd7782c-8bb0-4b79-a0dc-4c854a8feee3" stretchType="RelativeToTallestObject" x="114" y="0" width="198" height="15"/>
+				<box leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="a7411624-89ec-479c-aee7-8b4e0287248b" x="457" y="0" width="117" height="15">
+					<printWhenExpression><![CDATA[$P{IS_DISPLAY_PRICE}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{m_product_category_id} == 1000032 ? $F{grandtotal} :
+($F{system_count} > 0 ? 0 : $F{linenetamt})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="193" splitType="Stretch">
+			<textField>
+				<reportElement uuid="872bb852-a988-447b-84cf-fa67339bca51" x="128" y="127" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{updatedby}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="532626d2-7072-4856-af32-76192b7f14d7" x="411" y="0" width="162" height="14">
+					<printWhenExpression><![CDATA[$P{IS_DISPLAY_PRICE}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="2" rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{grandtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="66feca68-e8e1-45b4-a33d-7b81cb5fd42c" x="14" y="174" width="100" height="14"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documentno}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="e5a871e3-cbd6-4c06-bd59-22a33e179c8c" x="411" y="24" width="162" height="15"/>
+				<box leftPadding="2" rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{taxamt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6f1cf477-3676-4401-8c7c-0d6014fa4797" x="411" y="39" width="162" height="15"/>
+				<box leftPadding="2" rightPadding="3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{linenetamt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

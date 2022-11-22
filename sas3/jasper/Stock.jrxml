@@ -1,0 +1,699 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Stock" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1150" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="783bdd3e-7f38-45fb-bdfa-780d6bb45d7f">
+	<property name="ireport.zoom" value="0.7513148009015802"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.border" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.size.fix.enabled" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.3" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.5" value="pageFooter"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" isBlankWhenNull="true" fontSize="12">
+		<box leftPadding="5"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold">
+		<box leftPadding="0"/>
+	</style>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Left" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="5">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="10" pdfFontName="Times-Roman"/>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" fontSize="10" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" fontSize="10" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Date" style="Detail" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" pattern="dd-MM-yyyy" fontSize="10" pdfFontName="Times-Roman"/>
+	<style name="Strip" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Classification" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MovementDate1" class="java.util.Date"/>
+	<parameter name="MovementDate2" class="java.util.Date"/>
+	<parameter name="M_Product_Category_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Value" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Product_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Locator_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="M_Warehouse_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="RECORD_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	pc.Name PRODUCT_CATEGORY,
+	p.Value PRODUCT_CODE,
+	p.Name PRODUCT_NAME,
+	asi.Lot,
+	uom.Name UOM_NAME,
+	uom.Description UOM_DESCRIPTION,
+	l.Value LOCATOR,
+	parse('M_Warehouse',l.M_Warehouse_ID,1) WAREHOUSE,
+	GETSTOCK(p.M_Product_ID,'V+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) VRC_PLUS,
+	GETSTOCK(p.M_Product_ID,'V+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) VRC_MIN,
+	GETSTOCK(p.M_Product_ID,'V-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) VRT_PLUS,
+	GETSTOCK(p.M_Product_ID,'V-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) VRT_MIN,
+	GETSTOCK(p.M_Product_ID,'I+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) INV_IN,
+	GETSTOCK(p.M_Product_ID,'I-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) INV_OUT,
+	GETSTOCK(p.M_Product_ID,'C+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CR_PLUS,
+	GETSTOCK(p.M_Product_ID,'C+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CR_MIN,
+	GETSTOCK(p.M_Product_ID,'C-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CS_PLUS,
+	GETSTOCK(p.M_Product_ID,'C-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CS_MINUS,
+	GETSTOCK(p.M_Product_ID,'C-',$P{MovementDate1}::date,$P{MovementDate2}::date,'Y',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CSI_PLUS,
+	GETSTOCK(p.M_Product_ID,'C-',$P{MovementDate1}::date,$P{MovementDate2}::date,'Y',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) CSI_MINUS,
+	GETSTOCK(p.M_Product_ID,'M+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) MOVE_IN,
+	GETSTOCK(p.M_Product_ID,'M-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) MOVE_OUT,
+	GETSTOCK(p.M_Product_ID,'W+',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) WO_IN,
+	GETSTOCK(p.M_Product_ID,'W-',$P{MovementDate1}::date,$P{MovementDate2}::date,'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) WO_OUT,
+
+	GETSTOCK(p.M_Product_ID,'V+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_VRC_PLUS,
+	GETSTOCK(p.M_Product_ID,'V+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_VRC_MIN,
+	GETSTOCK(p.M_Product_ID,'V-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_VRT_PLUS,
+	GETSTOCK(p.M_Product_ID,'V-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_VRT_MIN,
+	GETSTOCK(p.M_Product_ID,'I+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_INV_IN,
+	GETSTOCK(p.M_Product_ID,'I-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_INV_OUT,
+	GETSTOCK(p.M_Product_ID,'C+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CR_PLUS,
+	GETSTOCK(p.M_Product_ID,'C+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CR_MIN,
+	GETSTOCK(p.M_Product_ID,'C-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CS_PLUS,
+	GETSTOCK(p.M_Product_ID,'C-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CS_MINUS,
+	GETSTOCK(p.M_Product_ID,'C-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'Y',-1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CSI_PLUS,
+	GETSTOCK(p.M_Product_ID,'C-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'Y',1,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_CSI_MINUS,
+	GETSTOCK(p.M_Product_ID,'M+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_MOVE_IN,
+	GETSTOCK(p.M_Product_ID,'M-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_MOVE_OUT,
+	GETSTOCK(p.M_Product_ID,'W+',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_WO_IN,
+	GETSTOCK(p.M_Product_ID,'W-',TO_DATE('01/01/1900','dd/mm/yyyy'),adddays($P{MovementDate1}::date,-1),'N',null,asi.M_AttributeSetInstance_ID,l.M_Locator_ID) START_WO_OUT
+FROM M_Product p
+INNER JOIN M_Product_Category pc ON (pc.M_Product_Category_ID = p.M_Product_Category_ID)
+INNER JOIN M_Storage s ON (s.M_Product_ID = p.M_Product_ID)
+LEFT JOIN M_AttributeSetInstance asi ON (asi.M_AttributeSetInstance_ID = s.M_AttributeSetInstance_ID)
+LEFT JOIN C_UOM uom ON (uom.C_UOM_ID = p.C_UOM_ID)
+INNER JOIN M_Locator l ON (l.M_Locator_ID = s.M_Locator_ID)
+WHERE 1=1
+	AND p.Classification LIKE (case when $P{Classification} = '' then '%' else p.Classification end)
+	AND p.Value LIKE (case when $P{Value} = '' then '%' else p.Value end)
+	AND p.M_Product_ID = COALESCE($P{M_Product_ID}::int,p.M_Product_ID)
+	AND p.M_Product_Category_ID = COALESCE($P{M_Product_Category_ID}::int,p.M_Product_Category_ID)
+	AND l.M_Warehouse_ID = COALESCE($P{M_Warehouse_ID}::int,l.M_Warehouse_ID)
+	AND l.M_Locator_ID = COALESCE($P{M_Locator_ID}::int,l.M_Locator_ID)
+ORDER BY pc.M_Product_Category_ID,p.Value,asi.Lot]]>
+	</queryString>
+	<field name="PRODUCT_CATEGORY" class="java.lang.String"/>
+	<field name="PRODUCT_CODE" class="java.lang.String"/>
+	<field name="PRODUCT_NAME" class="java.lang.String"/>
+	<field name="LOT" class="java.lang.String"/>
+	<field name="UOM_NAME" class="java.lang.String"/>
+	<field name="UOM_DESCRIPTION" class="java.lang.String"/>
+	<field name="LOCATOR" class="java.lang.String"/>
+	<field name="WAREHOUSE" class="java.lang.String"/>
+	<field name="VRC_PLUS" class="java.math.BigDecimal"/>
+	<field name="VRC_MIN" class="java.math.BigDecimal"/>
+	<field name="VRT_PLUS" class="java.math.BigDecimal"/>
+	<field name="VRT_MIN" class="java.math.BigDecimal"/>
+	<field name="INV_IN" class="java.math.BigDecimal"/>
+	<field name="INV_OUT" class="java.math.BigDecimal"/>
+	<field name="CR_PLUS" class="java.math.BigDecimal"/>
+	<field name="CR_MIN" class="java.math.BigDecimal"/>
+	<field name="CS_PLUS" class="java.math.BigDecimal"/>
+	<field name="CS_MINUS" class="java.math.BigDecimal"/>
+	<field name="CSI_PLUS" class="java.math.BigDecimal"/>
+	<field name="CSI_MINUS" class="java.math.BigDecimal"/>
+	<field name="MOVE_IN" class="java.math.BigDecimal"/>
+	<field name="MOVE_OUT" class="java.math.BigDecimal"/>
+	<field name="WO_IN" class="java.math.BigDecimal"/>
+	<field name="WO_OUT" class="java.math.BigDecimal"/>
+	<field name="START_VRC_PLUS" class="java.math.BigDecimal"/>
+	<field name="START_VRC_MIN" class="java.math.BigDecimal"/>
+	<field name="START_VRT_PLUS" class="java.math.BigDecimal"/>
+	<field name="START_VRT_MIN" class="java.math.BigDecimal"/>
+	<field name="START_INV_IN" class="java.math.BigDecimal"/>
+	<field name="START_INV_OUT" class="java.math.BigDecimal"/>
+	<field name="START_CR_PLUS" class="java.math.BigDecimal"/>
+	<field name="START_CR_MIN" class="java.math.BigDecimal"/>
+	<field name="START_CS_PLUS" class="java.math.BigDecimal"/>
+	<field name="START_CS_MINUS" class="java.math.BigDecimal"/>
+	<field name="START_CSI_PLUS" class="java.math.BigDecimal"/>
+	<field name="START_CSI_MINUS" class="java.math.BigDecimal"/>
+	<field name="START_MOVE_IN" class="java.math.BigDecimal"/>
+	<field name="START_MOVE_OUT" class="java.math.BigDecimal"/>
+	<field name="START_WO_IN" class="java.math.BigDecimal"/>
+	<field name="START_WO_OUT" class="java.math.BigDecimal"/>
+	<variable name="SALDO_AWAL" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{START_VRC_PLUS} +
+$F{START_VRC_MIN} +
+$F{START_VRT_PLUS} +
+$F{START_VRT_MIN} +
+$F{START_INV_IN} +
+$F{START_INV_OUT} +
+$F{START_CR_PLUS} +
+$F{START_CR_MIN} +
+$F{START_CS_PLUS} +
+$F{START_CS_MINUS} +
+$F{START_CSI_PLUS} +
+$F{START_CSI_MINUS} +
+$F{START_MOVE_IN} +
+$F{START_MOVE_OUT} +
+$F{START_WO_IN} +
+$F{START_WO_OUT}]]></variableExpression>
+	</variable>
+	<variable name="PEMBELIAN" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{VRC_PLUS}]]></variableExpression>
+	</variable>
+	<variable name="MASUK_LAIN2" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{CR_PLUS} + $F{INV_IN} + $F{VRT_MIN} + $F{CS_MINUS} + $F{MOVE_IN}]]></variableExpression>
+	</variable>
+	<variable name="HASIL_PRODUKSI" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{CSI_MINUS} + $F{WO_IN}]]></variableExpression>
+	</variable>
+	<variable name="PEMAKAIAN_PRODUKSI" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{CSI_PLUS} + $F{WO_OUT}]]></variableExpression>
+	</variable>
+	<variable name="KELUAR_LAIN2" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{VRC_MIN} + $F{INV_OUT} + $F{VRT_PLUS} + $F{CR_MIN} + $F{MOVE_OUT}]]></variableExpression>
+	</variable>
+	<variable name="PENGIRIMAN" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$F{CS_PLUS}]]></variableExpression>
+	</variable>
+	<variable name="SALDO_AKHIR" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{SALDO_AWAL} +
+$V{PEMBELIAN} +
+$V{MASUK_LAIN2} +
+$V{HASIL_PRODUKSI} +
+$V{PEMAKAIAN_PRODUKSI} +
+$V{KELUAR_LAIN2} +
+$V{PENGIRIMAN}]]></variableExpression>
+	</variable>
+	<variable name="LOT_SALDO_AWAL" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{START_VRC_PLUS} +
+$F{START_VRC_MIN} +
+$F{START_VRT_PLUS} +
+$F{START_VRT_MIN} +
+$F{START_INV_IN} +
+$F{START_INV_OUT} +
+$F{START_CR_PLUS} +
+$F{START_CR_MIN} +
+$F{START_CS_PLUS} +
+$F{START_CS_MINUS} +
+$F{START_CSI_PLUS} +
+$F{START_CSI_MINUS} +
+$F{START_MOVE_IN} +
+$F{START_MOVE_OUT} +
+$F{START_WO_IN} +
+$F{START_WO_OUT}]]></variableExpression>
+	</variable>
+	<variable name="LOT_PEMBELIAN" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{VRC_PLUS}]]></variableExpression>
+	</variable>
+	<variable name="LOT_MASUK_LAIN2" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{CR_PLUS} + $F{INV_IN} + $F{VRT_MIN} + $F{CS_MINUS} + $F{MOVE_IN}]]></variableExpression>
+	</variable>
+	<variable name="LOT_HASIL_PRODUKSI" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{CSI_MINUS} + $F{WO_IN}]]></variableExpression>
+	</variable>
+	<variable name="LOT_PEMAKAIAN_PRODUKSI" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{CSI_PLUS} + $F{WO_OUT}]]></variableExpression>
+	</variable>
+	<variable name="LOT_KELUAR_LAIN2" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{VRC_MIN} + $F{INV_OUT} + $F{VRT_PLUS} + $F{CR_MIN} + $F{MOVE_OUT}]]></variableExpression>
+	</variable>
+	<variable name="LOT_PENGIRIMAN" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$F{CS_PLUS}]]></variableExpression>
+	</variable>
+	<variable name="LOT_SALDO_AKHIR" class="java.math.BigDecimal" resetType="Group" resetGroup="LOT" calculation="Sum">
+		<variableExpression><![CDATA[$V{SALDO_AWAL} +
+$V{PEMBELIAN} +
+$V{MASUK_LAIN2} +
+$V{HASIL_PRODUKSI} +
+$V{PEMAKAIAN_PRODUKSI} +
+$V{KELUAR_LAIN2} +
+$V{PENGIRIMAN}]]></variableExpression>
+	</variable>
+	<group name="CATEGORY">
+		<groupExpression><![CDATA[$F{PRODUCT_CATEGORY}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="75324aa8-1c50-4bca-849b-9d28ec711e02" x="0" y="0" width="1149" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRODUCT_CATEGORY}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="PRODUCT">
+		<groupExpression><![CDATA[$F{PRODUCT_CODE}]]></groupExpression>
+	</group>
+	<group name="LOT">
+		<groupExpression><![CDATA[$F{LOT}]]></groupExpression>
+		<groupFooter>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="efce009b-296c-4fd8-991d-1270ef0bdff5" style="Detail" stretchType="RelativeToBandHeight" x="0" y="0" width="87" height="20" isRemoveLineWhenBlank="true"/>
+					<box leftPadding="5">
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{PRODUCT_CODE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="93aa31b3-5e54-4b8a-8d5f-c2e9816053fd" style="Detail" stretchType="RelativeToBandHeight" x="87" y="0" width="156" height="20" isRemoveLineWhenBlank="true"/>
+					<box leftPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{PRODUCT_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="45fc0a4a-1b67-467e-8e8a-303c93ff3a82" style="Detail" stretchType="RelativeToBandHeight" x="243" y="0" width="76" height="20" isRemoveLineWhenBlank="true"/>
+					<box leftPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{LOT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="2b7410cf-312a-4353-85a3-30936a837483" style="Detail Qty" x="719" y="0" width="130" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_PEMAKAIAN_PRODUKSI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="fb5a01d2-b468-438e-a4e8-b8157a4bf928" style="Detail Qty" x="849" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_KELUAR_LAIN2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="62b521f1-38e7-4f75-b228-2de88a9b2a0e" style="Detail Qty" x="1049" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_SALDO_AKHIR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="fae0a220-148e-4f0c-ac1b-32903fb25679" style="Detail Qty" x="619" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_HASIL_PRODUKSI}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="9e7e3b4b-5834-4d28-8ca3-7de1cf7eb012" style="Detail Qty" x="519" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_MASUK_LAIN2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="06922bad-6bfe-44c7-aa07-5d7fa68ca6c7" style="Detail Qty" x="319" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_SALDO_AWAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="3e9c9c00-656f-4c26-bca4-152daeb373da" style="Detail Qty" x="949" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_PENGIRIMAN}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="47382851-a1b6-4351-8acb-8ead3b3bf689" style="Detail Qty" x="419" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$V{LOT_PEMBELIAN}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="234e99bb-5265-403c-a6d9-755d3f86e8fe" stretchType="RelativeToBandHeight" x="0" y="0" width="1149" height="20"/>
+					<box leftPadding="5">
+						<bottomPen lineWidth="1.0"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="233" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="87be946e-59ad-488f-9280-a768f6fe708a" style="Title" x="0" y="0" width="1150" height="44"/>
+				<textElement/>
+				<text><![CDATA[STOCK REPORT]]></text>
+			</staticText>
+			<image scaleImage="RealSize" onErrorType="Blank">
+				<reportElement uuid="445d1e7a-ec1d-4d0c-85da-d8366b11c548" mode="Transparent" x="0" y="0" width="177" height="50"/>
+				<imageExpression><![CDATA["http://erp:8090/reports/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="ded8c541-6017-4eb3-bb15-c956ea4330f7" style="Default" x="0" y="73" width="114" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<text><![CDATA[Movement Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1500a794-4caa-44ae-8cf4-926e19e442a0" style="Default" x="114" y="73" width="17" height="20" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="b8458a64-61e1-4e9b-9419-6aa420b3a885" x="131" y="73" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{MovementDate1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b552dacb-45b3-42e9-9957-c56e85bc1be2" style="Default" x="231" y="73" width="17" height="20" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="51ddf16b-e255-44cc-8c44-6ff1b97bb34c" x="248" y="73" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{MovementDate2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1ac36b6b-5234-41f0-943e-442163356935" style="Default" x="114" y="93" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="18118f58-b9ee-4e59-af55-bcb439ae4a1d" style="Default" x="0" y="93" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d9dba7c7-fed4-4a40-bef8-7ea9c31b2991" style="Default" x="131" y="93" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5ab1772c-61d2-4ae5-b4b4-fbad5a34bf38" style="Default" x="114" y="133" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d43a9097-7e7b-4d5e-8d8e-a019084cdff7" style="Default" x="0" y="133" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Classification]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c5ba4aff-a3d8-425e-a211-19561f143c06" x="131" y="133" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Classification}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="09c17a30-e8a7-4426-a592-3f6ae81125b1" style="Default" x="114" y="113" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d637c5df-e00b-4549-a414-1db7ddf52bd2" style="Default" x="0" y="113" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product Code]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="742b08b5-0317-476a-9c0a-c88b4b3a95f0" x="131" y="113" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Value}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1840a72d-99f3-4ec6-908a-130978c748bc" style="Default" x="114" y="153" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dda59338-2e78-44db-8e5d-8603404971ec" style="Default" x="0" y="153" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product Category]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="06320bb0-47ae-4674-bcfc-b63c90bdbbb1" x="131" y="153" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_CATEGORY}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5fa7bef5-1d52-4c32-9ae5-ad75ec9a9c9f" style="Default" x="114" y="173" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="deb554b6-52b2-42a1-a7a6-6c3b2338e271" style="Default" x="0" y="173" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Warehouse]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1b64e427-c93c-47a8-ba69-1bbd8719eaaf" x="131" y="193" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LOCATOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4fe56fd3-2d60-4ca0-93d5-c5c08b65c6cb" style="Default" x="0" y="193" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Locator]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1cbab5ef-06b9-438c-b923-3ac2abe18757" x="131" y="173" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{WAREHOUSE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8b8ec87d-28ff-4aa1-b910-e071fee6c962" style="Default" x="114" y="193" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4dd5f32a-69da-459f-bb34-14f8b26ecfe4" style="Header" x="0" y="0" width="87" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba5a000e-521c-4151-adbe-242122b72533" style="Header" x="87" y="0" width="156" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Product Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c646f5c0-f725-4fec-ab36-9a68ae6154d2" style="Header" x="243" y="0" width="76" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Lot]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="54d604d5-3d3b-4265-b32d-6c73ff70bfb0" style="Header" x="319" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Saldo Awal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cfa95353-40da-4517-82ce-6661374039f7" style="Header" x="419" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pembelian]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="633e22a3-076c-473e-8738-046a883bf34b" style="Header" x="519" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Masuk Lain2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6e305f11-5341-43e2-a824-2ab64cb839f8" style="Header" x="619" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Hasil Produksi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e476da1b-79c7-4ea1-aab3-b03c6ce934f1" style="Header" x="719" y="0" width="130" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pemakaian Produksi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cee93ecc-eca3-4ff6-a348-71cdd870ed76" style="Header" x="849" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Keluar Lain2]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7008c417-2e9d-4932-857d-0bbb65408ae6" style="Header" x="949" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Pengiriman]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a7a7ce60-b62a-4e4e-bcc5-0e8d78bd72e1" style="Header" x="1049" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Saldo Akhir]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[new Boolean(false)]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="53837096-57ed-4002-927a-a2d550738969" style="Detail" stretchType="RelativeToBandHeight" x="0" y="0" width="87" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c982326b-7453-4ac4-a793-d2891079cdb7" style="Detail" stretchType="RelativeToBandHeight" x="87" y="0" width="156" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="905dc360-9026-495a-bba4-3354ef1f7ad9" style="Detail" stretchType="RelativeToBandHeight" x="243" y="0" width="76" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LOT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0665508f-7edf-4afa-8948-1b1f1d923b6a" style="Detail Qty" x="319" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{SALDO_AWAL}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f5565f61-f5d6-4cf1-88ea-894a6e99d254" style="Detail Qty" x="419" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PEMBELIAN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="6557df22-0364-4d9c-9215-f42b3360926c" style="Detail Qty" x="519" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{MASUK_LAIN2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="7b9c4350-af7d-4136-91ce-90e8456ee945" style="Detail Qty" x="619" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{HASIL_PRODUKSI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="510fb014-4338-4aca-aea2-59434076f1f3" style="Detail Qty" x="719" y="0" width="130" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PEMAKAIAN_PRODUKSI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="63e7109f-b86b-4364-8a55-4d13226ec041" style="Detail Qty" x="849" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{KELUAR_LAIN2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="cb142b95-d671-482e-aa8f-5ed85c9e8dfa" style="Detail Qty" x="949" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{PENGIRIMAN}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0a1bdf5c-24f8-4f0c-ac30-4263654a029c" style="Detail Qty" x="1049" y="0" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$V{SALDO_AKHIR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e34bc12a-3c84-46b7-99f8-4c04bf8c2301" x="1030" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="05d847b8-b25c-48d9-892f-bfcc698cdb18" x="1110" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="5416f55b-c464-4e84-a7a7-54282a6a3ee8" x="0" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

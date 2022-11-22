@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Cash&amp;BankReport" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0406b388-ba51-4620-ad2a-28d9070124ed">
+	<property name="ireport.zoom" value="1.6500000000000001"/>
+	<property name="ireport.x" value="18"/>
+	<property name="ireport.y" value="77"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.border" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.size.fix.enabled" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.3" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.5" value="pageFooter"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" isBlankWhenNull="true" fontSize="12">
+		<box leftPadding="5"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold">
+		<box leftPadding="0"/>
+	</style>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Left" fontName="SansSerif" fontSize="12" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="5">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman"/>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Date" style="Detail" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" pattern="dd-MM-yyyy" fontSize="12" pdfFontName="Times-Roman"/>
+	<style name="DetailRow" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="C_BankAccount_ID" class="java.lang.Integer"/>
+	<parameter name="DateAcct1" class="java.util.Date"/>
+	<parameter name="DateAcct2" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT z.*
+FROM
+(
+SELECT
+	ba.C_BankAccount_ID,
+	b.Name BANK_NAME,
+	ba.AccountNo,
+	(	SELECT COALESCE(SUM(fa.AmtAcctDr - fa.AmtAcctCr),0)
+		FROM Fact_Acct fa
+		WHERE fa.Account_ID IN (SELECT vc.Account_ID
+					FROM C_ValidCombination vc
+					WHERE vc.C_ValidCombination_ID IN (baa.B_Asset_Acct))
+		AND fa.DateAcct < $P{DateAcct1}
+		AND fa.GL_Category_ID <> 1000002
+		AND fa.AD_Org_ID = ba.AD_Org_ID
+	) AS START_BALANCE,
+	(	SELECT COALESCE(SUM(fa.AmtSourceDr - fa.AmtSourceCr),0)
+		FROM Fact_Acct fa
+		WHERE fa.Account_ID IN (SELECT vc.Account_ID
+					FROM C_ValidCombination vc
+					WHERE vc.C_ValidCombination_ID IN (baa.B_Asset_Acct))
+		AND fa.DateAcct < $P{DateAcct1}
+		AND fa.GL_Category_ID <> 1000002
+		AND fa.AD_Org_ID = ba.AD_Org_ID
+	) AS SOURCE_START_BALANCE,
+	bsl.DateAcct,
+	p.DocumentNo,
+	parse('C_BPartner',p.C_BPartner_ID,1) BP_NAME,
+	p.CheckNo,
+	p.EftValutaDate,
+	(CASE WHEN p.C_Currency_ID = 303 THEN p.PayAmt ELSE COALESCE(CURRENCYCONVERT(p.PayAmt,p.C_Currency_ID,303,p.DateAcct,p.C_ConversionType_ID,p.AD_Client_ID,p.AD_Org_ID),0) END) * (CASE WHEN p.IsReceipt = 'Y' THEN 1 ELSE -1 END) AS PAYAMT,
+	p.IsReceipt,
+	GETREFLIST('ALL','DOCSTATUS',p.DocStatus) AS DOC_STATUS,
+	p.Description,
+	--p.ReferenceNo,
+	parse('C_Currency',p.C_Currency_ID,0) CURRENCY,
+	p.PayAmt * (CASE WHEN p.IsReceipt = 'Y' THEN 1 ELSE -1 END) SOURCEAMT,
+	bsl.StatementLineDate
+FROM C_Payment p
+INNER JOIN C_BankAccount ba ON (ba.C_BankAccount_ID = p.C_BankAccount_ID)
+INNER JOIN C_Bank b ON (b.C_Bank_ID = ba.C_Bank_ID)
+INNER JOIN C_BankAccount_Acct baa ON (baa.C_BankAccount_ID=ba.C_BankAccount_ID AND baa.C_AcctSchema_ID = 1000001)
+INNER JOIN C_BankStatementLine bsl ON (bsl.C_Payment_ID = p.C_Payment_ID)
+INNER JOIN C_BankStatement bs ON (bs.C_BankStatement_ID = bsl.C_BankStatement_ID)
+WHERE 1=1
+	AND b.IsOwnBank = 'Y'
+	AND p.DocStatus IN ('CO','CL')
+	AND bs.DocStatus NOT IN ('VO')
+	AND p.C_BankAccount_ID = COALESCE($P{C_BankAccount_ID}::int,p.C_BankAccount_ID)
+	AND bsl.DateAcct >= COALESCE($P{DateAcct1},bsl.DateAcct)
+	AND bsl.DateAcct <= COALESCE($P{DateAcct2},bsl.DateAcct)
+
+UNION
+
+SELECT
+	ba.C_BankAccount_ID,
+	b.Name BANK_NAME,
+	ba.AccountNo,
+	(	SELECT COALESCE(SUM(fa.AmtAcctDr - fa.AmtAcctCr),0)
+		FROM Fact_Acct fa
+		WHERE fa.Account_ID IN (SELECT vc.Account_ID
+					FROM C_ValidCombination vc
+					WHERE vc.C_ValidCombination_ID IN (baa.B_Asset_Acct))
+		AND fa.DateAcct < $P{DateAcct1}
+		AND fa.GL_Category_ID <> 1000002
+		AND fa.AD_Org_ID = ba.AD_Org_ID
+	) AS START_BALANCE,
+	(	SELECT COALESCE(SUM(fa.AmtSourceDr - fa.AmtSourceCr),0)
+		FROM Fact_Acct fa
+		WHERE fa.Account_ID IN (SELECT vc.Account_ID
+					FROM C_ValidCombination vc
+					WHERE vc.C_ValidCombination_ID IN (baa.B_Asset_Acct))
+		AND fa.DateAcct < $P{DateAcct1}
+		AND fa.GL_Category_ID <> 1000002
+		AND fa.AD_Org_ID = ba.AD_Org_ID
+	) AS SOURCE_START_BALANCE,
+	NULL DateAcct,
+	NULL DocumentNo,
+	NULL BP_NAME,
+	NULL CheckNo,
+	NULL EftValutaDate,
+	NULL PAYAMT,
+	NULL IsReceipt,
+	NULL DOC_STATUS,
+	NULL Description,
+	--NULL ReferenceNo,
+	NULL CURRENCY,
+	NULL SOURCEAMT,
+	NULL StatementLineDate
+FROM C_BankAccount ba
+INNER JOIN C_BankAccount_Acct baa ON (baa.C_BankAccount_ID=ba.C_BankAccount_ID AND baa.C_AcctSchema_ID = 1000001)
+INNER JOIN C_Bank b ON (ba.C_Bank_ID = b.C_Bank_ID)
+WHERE 1=1
+	AND b.IsOwnBank = 'Y'
+	AND ba.C_BankAccount_ID = COALESCE($P{C_BankAccount_ID}::int,ba.C_BankAccount_ID)
+) z
+ORDER BY z.C_BankAccount_ID,z.IsReceipt DESC,z.DateAcct]]>
+	</queryString>
+	<field name="c_bankaccount_id" class="java.math.BigDecimal"/>
+	<field name="bank_name" class="java.lang.String"/>
+	<field name="accountno" class="java.lang.String"/>
+	<field name="start_balance" class="java.math.BigDecimal"/>
+	<field name="source_start_balance" class="java.math.BigDecimal"/>
+	<field name="dateacct" class="java.sql.Timestamp"/>
+	<field name="documentno" class="java.lang.String"/>
+	<field name="bp_name" class="java.lang.String"/>
+	<field name="checkno" class="java.lang.String"/>
+	<field name="eftvalutadate" class="java.sql.Timestamp"/>
+	<field name="payamt" class="java.math.BigDecimal"/>
+	<field name="isreceipt" class="java.lang.String"/>
+	<field name="doc_status" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="currency" class="java.lang.String"/>
+	<field name="sourceamt" class="java.math.BigDecimal"/>
+	<field name="statementlinedate" class="java.sql.Timestamp"/>
+	<variable name="RECEIPT_PAYAMT" class="java.math.BigDecimal" resetType="Group" resetGroup="ISRECEIPT" calculation="Sum">
+		<variableExpression><![CDATA[$F{payamt}]]></variableExpression>
+	</variable>
+	<variable name="BANK_PAYAMT" class="java.math.BigDecimal" resetType="Group" resetGroup="BANK_ACCOUNT" calculation="Sum">
+		<variableExpression><![CDATA[$F{payamt}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_PAYAMT" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{payamt}]]></variableExpression>
+	</variable>
+	<variable name="START_BALANCE" class="java.math.BigDecimal" resetType="Group" resetGroup="BANK_ACCOUNT" calculation="Sum">
+		<variableExpression><![CDATA[$F{start_balance}]]></variableExpression>
+	</variable>
+	<variable name="BALANCE" class="java.math.BigDecimal" resetType="Group" resetGroup="BANK_ACCOUNT" calculation="Sum">
+		<variableExpression><![CDATA[$F{payamt}]]></variableExpression>
+		<initialValueExpression><![CDATA[$F{start_balance}]]></initialValueExpression>
+	</variable>
+	<variable name="SOURCE_BALANCE" class="java.math.BigDecimal" resetType="Group" resetGroup="BANK_ACCOUNT" calculation="Sum">
+		<variableExpression><![CDATA[$F{sourceamt}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="RECEIPT_SOURCEAMT" class="java.math.BigDecimal" resetType="Group" resetGroup="ISRECEIPT" calculation="Sum">
+		<variableExpression><![CDATA[$F{sourceamt}]]></variableExpression>
+	</variable>
+	<variable name="BANK_SOURCEAMT" class="java.math.BigDecimal" resetType="Group" resetGroup="BANK_ACCOUNT" calculation="Sum">
+		<variableExpression><![CDATA[$F{sourceamt}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_SOURCEAMT" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sourceamt}]]></variableExpression>
+	</variable>
+	<group name="BANK_ACCOUNT">
+		<groupExpression><![CDATA[$F{c_bankaccount_id}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement uuid="ed032a9d-3fd1-46fa-a44b-26995a79533d" mode="Opaque" x="0" y="0" width="752" height="20" backcolor="#CCCCCC"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bank_name} + " " + $F{accountno}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="5eba044a-584a-413b-a350-59cb573021f7" style="Detail" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="20" width="532" height="20" isRemoveLineWhenBlank="true" backcolor="#CCCCCC"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["BEGINNING BALANCE"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="f6e1b5a8-e706-400a-971a-e96a9d4978d1" style="Detail Amt" stretchType="RelativeToTallestObject" mode="Opaque" x="532" y="20" width="110" height="20" isRemoveLineWhenBlank="true" backcolor="#CCCCCC"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{source_start_balance}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="a6aea11a-3041-4965-a20e-72fa5dbf599c" style="Detail Amt" stretchType="RelativeToTallestObject" mode="Opaque" x="642" y="20" width="110" height="20" isRemoveLineWhenBlank="true" backcolor="#CCCCCC"/>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{source_start_balance}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="21">
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="38130887-839e-49da-9be8-ad75991f25ee" style="Detail Amt" stretchType="RelativeToTallestObject" x="532" y="0" width="110" height="20">
+						<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+					</reportElement>
+					<box rightPadding="5">
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{BANK_SOURCEAMT} + $F{source_start_balance}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="07c8e169-0b8c-4d40-99cc-47e88c343f9d" style="Detail" stretchType="RelativeToTallestObject" x="0" y="0" width="532" height="20">
+						<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+					</reportElement>
+					<box leftPadding="5">
+						<topPen lineWidth="1.0" lineStyle="Solid"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TOTAL " + $F{bank_name} + " " + $F{accountno}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="8995d32d-7eae-4162-a004-6de77f8d21bc" style="Detail Amt" stretchType="RelativeToTallestObject" x="642" y="0" width="110" height="20">
+						<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+					</reportElement>
+					<box rightPadding="5">
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SOURCE_BALANCE} + $F{source_start_balance}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="ISRECEIPT">
+		<groupExpression><![CDATA[$F{isreceipt}]]></groupExpression>
+		<groupHeader>
+			<band height="12">
+				<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="db3b107f-f192-4d06-8720-0ad3d773341b" style="Detail" stretchType="RelativeToTallestObject" x="0" y="0" width="752" height="12" isRemoveLineWhenBlank="true"/>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{isreceipt}.equals("Y") ? "Payment In" : "Payment Out"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="f1dbd0b9-4adb-49c6-95da-81de950e2931" style="Detail Amt" stretchType="RelativeToTallestObject" x="532" y="0" width="110" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<topPen lineWidth="1.0" lineStyle="Dotted"/>
+					</box>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{RECEIPT_SOURCEAMT}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="f4eaddc3-4f20-4a57-a6bf-eaa106c85c7d" style="Detail" stretchType="RelativeToTallestObject" x="-2" y="0" width="534" height="20" isRemoveLineWhenBlank="true"/>
+					<box leftPadding="5">
+						<topPen lineWidth="1.0" lineStyle="Dotted"/>
+					</box>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{isreceipt}.equals("Y") ? "Subtotal Payment In" : "Subtotal Payment Out"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="6b4cd2e8-8d6d-4899-8396-00e0d6dbe2c9" style="Detail Amt" stretchType="RelativeToTallestObject" x="642" y="0" width="110" height="20" isRemoveLineWhenBlank="true"/>
+					<box rightPadding="5">
+						<topPen lineWidth="1.0" lineStyle="Dotted"/>
+					</box>
+					<textElement>
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SOURCE_BALANCE} + $F{source_start_balance}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="5149dfb1-30c0-4853-98a6-3611b86534b1" style="Title" x="0" y="0" width="752" height="44"/>
+				<textElement/>
+				<text><![CDATA[Cash & Bank Report]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="644ca8ba-15e5-49fe-ac6a-b25c1e5f7446" style="Header" x="0" y="0" width="60" height="25"/>
+				<box leftPadding="2"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e7572fe9-523e-4d7f-8749-6c43829772fb" style="Header" x="120" y="0" width="103" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Document No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0485eb95-2740-4be5-86ef-1b39133e40ad" style="Header" x="299" y="0" width="233" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[BP Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="564787f1-cb7b-4684-a1d7-2848053927c4" style="Header" x="642" y="0" width="110" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Balance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="96e55319-b367-41e1-9232-8e780cd61ff1" style="Header" x="532" y="0" width="110" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="450e10af-91b3-4adf-8f3b-13ea0a7fe667" style="Header" x="223" y="0" width="76" height="25"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d3e72217-71d7-456a-b1cc-2c99fc836077" style="Header" x="60" y="0" width="60" height="25"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Statement Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="76f68a79-9b28-4754-bc86-96840acb3884" style="Detail Date" stretchType="RelativeToBandHeight" x="0" y="0" width="60" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dateacct}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6960e9ce-a7ff-4d33-8092-2f2eea3572a8" style="Detail" stretchType="RelativeToBandHeight" x="120" y="0" width="103" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documentno}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d4e1000f-9263-4c14-8a50-7301732979dc" style="Detail" stretchType="RelativeToBandHeight" x="299" y="0" width="233" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bp_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="59cb8c4e-ce5f-4ec7-b3a3-7750f994662a" style="Detail Amt" stretchType="RelativeToBandHeight" x="532" y="0" width="110" height="12" isRemoveLineWhenBlank="true"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sourceamt}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b6e34a6b-5b9d-4bb3-9322-5ac3be6d2106" style="Detail" stretchType="RelativeToBandHeight" x="223" y="0" width="76" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="faa2c996-e718-499a-90df-7562fab74f7e" style="Detail Amt" stretchType="RelativeToBandHeight" x="642" y="0" width="110" height="12" isRemoveLineWhenBlank="true"/>
+				<box rightPadding="5">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOURCE_BALANCE} + $F{source_start_balance}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="681b7be4-9a26-41e4-afb8-074bf64e1cfb" style="Detail Date" stretchType="RelativeToBandHeight" x="60" y="0" width="60" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5" rightPadding="0">
+					<topPen lineWidth="1.0" lineStyle="Dashed"/>
+				</box>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{statementlinedate}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="2">
+			<printWhenExpression><![CDATA[$F{isreceipt}!=null]]></printWhenExpression>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="65610d7f-b68e-4d4a-a3fe-6f52b341e563" x="632" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="2e8d2bcb-0434-43c7-a0bc-f11a0be1d525" x="712" y="0" width="40" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="f1f7d8d2-e770-48f3-abf4-5aa20e424778" x="0" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

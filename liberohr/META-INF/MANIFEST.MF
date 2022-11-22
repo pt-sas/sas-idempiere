@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: LiberoHR
+Bundle-SymbolicName: LiberoHR;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.adempiere.ui;bundle-version="1.0.0",
+ org.adempiere.base;bundle-version="1.0.0",
+ org.adempiere.base.process;bundle-version="1.0.0",
+ org.adempiere.plugin.utils;bundle-version="0.0.0",
+ org.eclipse.equinox.ds;bundle-version="1.3.1",
+ org.eclipse.equinox.util;bundle-version="1.0.300"
+Bundle-Activator: org.adempiere.plugin.utils.AdempiereActivator
+Bundle-ActivationPolicy: lazy
+Export-Package: org.compiere.acct,
+ org.eevolution.form,
+ org.eevolution.model,
+ org.eevolution.process,
+ org.idempiere.component,
+ org.idempiere.process
+Service-Component: OSGI-INF/HR_DocFactory.xml, OSGI-INF/HR_ModelFactory.xml
+

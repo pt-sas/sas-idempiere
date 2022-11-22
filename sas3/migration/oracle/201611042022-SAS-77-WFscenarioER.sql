@@ -1,0 +1,567 @@
+-- Nov 4, 2016 5:52:08 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 17:51:55','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000126
+;
+
+-- Nov 4, 2016 5:52:17 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 17:52:17','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000127
+;
+
+-- Nov 4, 2016 5:52:30 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-3.000000000000,Updated=TO_DATE('2016-11-04 17:52:30','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000128
+;
+
+-- Nov 4, 2016 5:52:33 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 17:52:33','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000129
+;
+
+-- Nov 4, 2016 5:52:38 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 17:52:38','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000130
+;
+
+-- Nov 4, 2016 5:52:55 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 17:52:55','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000131
+;
+
+-- Nov 4, 2016 5:52:59 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 17:52:59','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000132
+;
+
+-- Nov 4, 2016 5:55:33 PM WIT
+--  
+INSERT INTO AD_Role (C_Currency_ID,AD_Role_ID,AmtApproval,IsPersonalLock,IsUseUserOrgAccess,IsPersonalAccess,IsShowAcct,IsCanReport,IsChangeLog,OverwritePriceLimit,Allow_Info_Asset,Allow_Info_Order,Allow_Info_BPartner,Allow_Info_InOut,Allow_Info_Invoice,Allow_Info_Payment,Allow_Info_Resource,Allow_Info_Schedule,Allow_Info_Product,Allow_Info_Account,MaxQueryRecords,ConfirmQueryRecords,AmtApprovalAccum,DaysApprovalAccum,Description,Name,IsCanApproveOwnDoc,AD_Role_UU,PreferenceType,IsAccessAllOrgs,Updated,IsActive,IsMenuAutoExpand,IsManual,IsMasterRole,UserLevel,IsCanExport,IsAccessAdvanced,AD_Client_ID,AD_Org_ID,Created,UpdatedBy,CreatedBy,IsAllowMultiplePrint) VALUES (303,2000213,9999999999999.000000000000,'N','Y','N','N','Y','Y','N','Y','N','N','N','N','N','Y','N','N','N',0,0,9999999999999.000000000000,0,'Role approval Expense Report for GM OPERASIONAL','W_App_ER_GM_OPERASIONAL','N','cdf0f4af-bd7c-4ca9-b3e7-c1d195501133','O','N',TO_DATE('2016-11-04 17:55:33','YYYY-MM-DD HH24:MI:SS'),'Y','N','Y','N',' CO','Y','N',1000001,0,TO_DATE('2016-11-04 17:55:33','YYYY-MM-DD HH24:MI:SS'),100,100,'N')
+;
+
+-- Nov 4, 2016 5:55:33 PM WIT
+--  
+INSERT INTO AD_User_Roles (AD_Role_ID,AD_User_Roles_UU,Updated,IsActive,AD_Client_ID,AD_Org_ID,AD_User_ID,Created,UpdatedBy,CreatedBy) VALUES (2000213,'c35ef4a5-ba5d-4edc-9e19-59e2782c2e65',TO_DATE('2016-11-04 17:55:33','YYYY-MM-DD HH24:MI:SS'),'Y',1000001,0,100,TO_DATE('2016-11-04 17:55:33','YYYY-MM-DD HH24:MI:SS'),100,100)
+;
+
+-- Nov 4, 2016 5:55:47 PM WIT
+--  
+INSERT INTO AD_WF_Responsible (AD_WF_Responsible_ID,ResponsibleType,EntityType,AD_WF_Responsible_UU,Name,IsActive,Updated,AD_Role_ID,AD_Org_ID,Created,UpdatedBy,CreatedBy,AD_Client_ID) VALUES (550237,'R','U','23d7427b-00fd-4c75-ba19-d3629efc7077','W_App_ER_GM_OPERASIONAL','Y',TO_DATE('2016-11-04 17:55:45','YYYY-MM-DD HH24:MI:SS'),2000213,0,TO_DATE('2016-11-04 17:55:45','YYYY-MM-DD HH24:MI:SS'),100,100,1000001)
+;
+
+-- Nov 4, 2016 5:55:56 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000088,100,-2.000000000000,0,550237,TO_DATE('2016-11-04 17:55:56','YYYY-MM-DD HH24:MI:SS'),'Y',0,100,TO_DATE('2016-11-04 17:55:56','YYYY-MM-DD HH24:MI:SS'),1000217,1000001)
+;
+
+-- Nov 4, 2016 5:56:19 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET AD_WF_Responsible_ID=550214,Updated=TO_DATE('2016-11-04 17:56:19','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000217
+;
+
+-- Nov 4, 2016 5:56:37 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000088,100,-1.000000000000,0,550237,TO_DATE('2016-11-04 17:56:37','YYYY-MM-DD HH24:MI:SS'),'Y',10,100,TO_DATE('2016-11-04 17:56:37','YYYY-MM-DD HH24:MI:SS'),1000218,1000001)
+;
+
+-- Nov 4, 2016 5:57:06 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-3.000000000000,Updated=TO_DATE('2016-11-04 17:57:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000217
+;
+
+-- Nov 4, 2016 5:57:12 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 17:57:12','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000218
+;
+
+-- Nov 4, 2016 5:57:45 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000088,100,-1.000000000000,0,550201,TO_DATE('2016-11-04 17:57:45','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 17:57:45','YYYY-MM-DD HH24:MI:SS'),1000219,1000001)
+;
+
+-- Nov 4, 2016 6:00:33 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:00:33','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000137
+;
+
+-- Nov 4, 2016 6:00:37 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:00:37','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000138
+;
+
+-- Nov 4, 2016 6:00:43 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:00:43','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000157
+;
+
+-- Nov 4, 2016 6:00:47 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:00:47','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000158
+;
+
+-- Nov 4, 2016 6:00:53 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:00:53','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000159
+;
+
+-- Nov 4, 2016 6:00:57 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:00:57','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000160
+;
+
+-- Nov 4, 2016 6:01:04 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:01:04','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000143
+;
+
+-- Nov 4, 2016 6:01:07 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:01:07','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000144
+;
+
+-- Nov 4, 2016 6:01:21 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:01:21','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000161
+;
+
+-- Nov 4, 2016 6:01:24 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:01:24','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000162
+;
+
+-- Nov 4, 2016 6:01:31 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:01:31','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000135
+;
+
+-- Nov 4, 2016 6:01:36 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:01:36','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000136
+;
+
+-- Nov 4, 2016 6:01:42 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:01:42','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000145
+;
+
+-- Nov 4, 2016 6:01:46 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:01:46','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000146
+;
+
+-- Nov 4, 2016 6:01:52 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:01:52','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000163
+;
+
+-- Nov 4, 2016 6:01:56 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:01:56','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000164
+;
+
+-- Nov 4, 2016 6:02:02 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:02:02','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000133
+;
+
+-- Nov 4, 2016 6:02:07 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:02:07','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000134
+;
+
+-- Nov 4, 2016 6:02:13 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:02:13','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000141
+;
+
+-- Nov 4, 2016 6:02:16 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:02:16','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000142
+;
+
+-- Nov 4, 2016 6:02:25 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:02:25','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000165
+;
+
+-- Nov 4, 2016 6:02:28 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:02:28','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000166
+;
+
+-- Nov 4, 2016 6:02:35 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:02:35','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000147
+;
+
+-- Nov 4, 2016 6:02:39 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:02:39','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000148
+;
+
+-- Nov 4, 2016 6:02:47 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:02:47','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000149
+;
+
+-- Nov 4, 2016 6:02:51 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:02:51','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000150
+;
+
+-- Nov 4, 2016 6:03:03 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:03:03','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000151
+;
+
+-- Nov 4, 2016 6:03:15 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:03:15','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000154
+;
+
+-- Nov 4, 2016 6:03:23 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:03:23','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000152
+;
+
+-- Nov 4, 2016 6:03:27 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:03:27','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000153
+;
+
+-- Nov 4, 2016 6:03:35 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:03:35','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000155
+;
+
+-- Nov 4, 2016 6:03:39 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:03:39','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000156
+;
+
+-- Nov 4, 2016 6:03:46 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:03:46','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000169
+;
+
+-- Nov 4, 2016 6:03:50 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:03:50','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000170
+;
+
+-- Nov 4, 2016 6:04:02 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:04:02','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000167
+;
+
+-- Nov 4, 2016 6:04:06 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:04:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000168
+;
+
+-- Nov 4, 2016 6:04:13 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:04:13','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000171
+;
+
+-- Nov 4, 2016 6:04:16 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:04:16','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000172
+;
+
+-- Nov 4, 2016 6:04:23 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:04:23','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000139
+;
+
+-- Nov 4, 2016 6:04:27 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:04:27','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000140
+;
+
+-- Nov 4, 2016 6:04:40 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-2.000000000000,Updated=TO_DATE('2016-11-04 18:04:40','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000178
+;
+
+-- Nov 4, 2016 6:04:43 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:04:43','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000179
+;
+
+-- Nov 4, 2016 6:09:17 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000111,100,3000000.000000000000,0,TO_DATE('2016-11-04 18:09:16','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:09:16','YYYY-MM-DD HH24:MI:SS'),1000220,1000001)
+;
+
+-- Nov 4, 2016 6:11:59 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET AD_WF_Responsible_ID=550217,Updated=TO_DATE('2016-11-04 18:11:59','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000220
+;
+
+-- Nov 4, 2016 6:12:14 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:12:14','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000215
+;
+
+-- Nov 4, 2016 6:12:20 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:12:20','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000216
+;
+
+-- Nov 4, 2016 6:13:56 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000128,100,3000000.000000000000,0,550228,TO_DATE('2016-11-04 18:13:56','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:13:56','YYYY-MM-DD HH24:MI:SS'),1000221,1000001)
+;
+
+-- Nov 4, 2016 6:14:20 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000129,100,-1.000000000000,0,550214,TO_DATE('2016-11-04 18:14:20','YYYY-MM-DD HH24:MI:SS'),'Y',0,100,TO_DATE('2016-11-04 18:14:20','YYYY-MM-DD HH24:MI:SS'),1000222,1000001)
+;
+
+-- Nov 4, 2016 6:14:21 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000129,100,-1.000000000000,0,550233,TO_DATE('2016-11-04 18:14:20','YYYY-MM-DD HH24:MI:SS'),'Y',10,100,TO_DATE('2016-11-04 18:14:20','YYYY-MM-DD HH24:MI:SS'),1000223,1000001)
+;
+
+-- Nov 4, 2016 6:14:21 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000129,100,3000000.000000000000,0,550228,TO_DATE('2016-11-04 18:14:21','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:14:21','YYYY-MM-DD HH24:MI:SS'),1000224,1000001)
+;
+
+-- Nov 4, 2016 6:14:36 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET AD_WF_Responsible_ID=550229,Updated=TO_DATE('2016-11-04 18:14:36','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000224
+;
+
+-- Nov 4, 2016 6:15:50 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:15:50','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000195
+;
+
+-- Nov 4, 2016 6:15:59 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:15:59','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000196
+;
+
+-- Nov 4, 2016 6:16:16 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000118,100,3000000.000000000000,0,550220,TO_DATE('2016-11-04 18:16:16','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:16:16','YYYY-MM-DD HH24:MI:SS'),1000225,1000001)
+;
+
+-- Nov 4, 2016 6:16:23 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:16:23','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000187
+;
+
+-- Nov 4, 2016 6:16:27 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:16:27','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000188
+;
+
+-- Nov 4, 2016 6:17:21 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000110,100,3000000.000000000000,0,550216,TO_DATE('2016-11-04 18:17:21','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:17:21','YYYY-MM-DD HH24:MI:SS'),1000226,1000001)
+;
+
+-- Nov 4, 2016 6:17:48 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000119,100,3000000.000000000000,0,550221,TO_DATE('2016-11-04 18:17:48','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:17:48','YYYY-MM-DD HH24:MI:SS'),1000227,1000001)
+;
+
+-- Nov 4, 2016 6:18:06 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:18:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000199
+;
+
+-- Nov 4, 2016 6:18:09 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:18:09','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000200
+;
+
+-- Nov 4, 2016 6:18:23 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000120,100,3000000.000000000000,0,550230,TO_DATE('2016-11-04 18:18:23','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:18:23','YYYY-MM-DD HH24:MI:SS'),1000228,1000001)
+;
+
+-- Nov 4, 2016 6:34:20 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:34:20','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000193
+;
+
+-- Nov 4, 2016 6:34:24 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:34:24','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000194
+;
+
+-- Nov 4, 2016 6:36:06 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000117,100,3000000.000000000000,0,550219,TO_DATE('2016-11-04 18:36:06','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:36:06','YYYY-MM-DD HH24:MI:SS'),1000229,1000001)
+;
+
+-- Nov 4, 2016 6:36:14 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:36:14','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000191
+;
+
+-- Nov 4, 2016 6:36:18 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:36:18','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000192
+;
+
+-- Nov 4, 2016 6:36:39 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000116,100,3000000.000000000000,0,550231,TO_DATE('2016-11-04 18:36:39','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:36:39','YYYY-MM-DD HH24:MI:SS'),1000230,1000001)
+;
+
+-- Nov 4, 2016 6:41:44 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:41:44','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000201
+;
+
+-- Nov 4, 2016 6:41:48 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:41:48','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000202
+;
+
+-- Nov 4, 2016 6:42:04 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000121,100,3000000.000000000000,0,550222,TO_DATE('2016-11-04 18:42:04','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:42:04','YYYY-MM-DD HH24:MI:SS'),1000231,1000001)
+;
+
+-- Nov 4, 2016 6:42:13 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:42:13','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000203
+;
+
+-- Nov 4, 2016 6:42:31 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:42:31','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000204
+;
+
+-- Nov 4, 2016 6:42:48 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000122,100,3000000.000000000000,0,550223,TO_DATE('2016-11-04 18:42:47','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:42:47','YYYY-MM-DD HH24:MI:SS'),1000232,1000001)
+;
+
+-- Nov 4, 2016 6:42:58 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:42:58','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000205
+;
+
+-- Nov 4, 2016 6:43:03 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:43:03','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000206
+;
+
+-- Nov 4, 2016 6:43:17 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000123,100,3000000.000000000000,0,550224,TO_DATE('2016-11-04 18:43:17','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:43:17','YYYY-MM-DD HH24:MI:SS'),1000233,1000001)
+;
+
+-- Nov 4, 2016 6:43:26 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:43:26','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000207
+;
+
+-- Nov 4, 2016 6:43:31 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 18:43:31','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000208
+;
+
+-- Nov 4, 2016 6:43:48 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000124,100,3000000.000000000000,0,550225,TO_DATE('2016-11-04 18:43:48','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 18:43:48','YYYY-MM-DD HH24:MI:SS'),1000234,1000001)
+;
+
+-- Nov 4, 2016 7:06:12 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:06:12','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000209
+;
+
+-- Nov 4, 2016 7:06:18 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:06:18','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000210
+;
+
+-- Nov 4, 2016 7:06:28 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000125,100,3000000.000000000000,0,TO_DATE('2016-11-04 19:06:28','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 19:06:28','YYYY-MM-DD HH24:MI:SS'),1000235,1000001)
+;
+
+-- Nov 4, 2016 7:06:42 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET AD_WF_Responsible_ID=550226,Updated=TO_DATE('2016-11-04 19:06:42','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000235
+;
+
+-- Nov 4, 2016 7:06:49 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:06:49','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000211
+;
+
+-- Nov 4, 2016 7:06:52 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:06:52','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000212
+;
+
+-- Nov 4, 2016 7:07:18 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000126,100,3000000.000000000000,0,550227,TO_DATE('2016-11-04 19:07:18','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 19:07:18','YYYY-MM-DD HH24:MI:SS'),1000236,1000001)
+;
+
+-- Nov 4, 2016 7:07:25 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:07:25','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000213
+;
+
+-- Nov 4, 2016 7:07:30 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:07:30','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000214
+;
+
+-- Nov 4, 2016 7:08:28 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000127,100,3000000.000000000000,0,101,TO_DATE('2016-11-04 19:08:28','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 19:08:28','YYYY-MM-DD HH24:MI:SS'),1000237,1000001)
+;
+
+-- Nov 4, 2016 7:09:33 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET AD_WF_Responsible_ID=550232,Updated=TO_DATE('2016-11-04 19:09:33','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000237
+;
+
+-- Nov 4, 2016 7:42:24 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:42:24','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000189
+;
+
+-- Nov 4, 2016 7:42:28 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:42:28','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000190
+;
+
+-- Nov 4, 2016 7:42:45 PM WIT
+--  
+INSERT INTO Z_WFScenarioLine (Z_WFScenario_ID,CreatedBy,GrandTotal,AD_Org_ID,AD_WF_Responsible_ID,Created,IsActive,Line,UpdatedBy,Updated,Z_WFScenarioLine_ID,AD_Client_ID) VALUES (1000115,100,3000000.000000000000,0,550218,TO_DATE('2016-11-04 19:42:45','YYYY-MM-DD HH24:MI:SS'),'Y',20,100,TO_DATE('2016-11-04 19:42:45','YYYY-MM-DD HH24:MI:SS'),1000238,1000001)
+;
+
+-- Nov 4, 2016 7:46:55 PM WIT
+--  
+UPDATE AD_Role SET Name='W_App_Mgr-AST',Updated=TO_DATE('2016-11-04 19:46:55','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Role_ID=2000210
+;
+
+-- Nov 4, 2016 7:47:32 PM WIT
+--  
+UPDATE AD_WF_Responsible SET Name='W_App_Mgr-AST',Updated=TO_DATE('2016-11-04 19:47:32','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Responsible_ID=550234
+;
+
+-- Nov 4, 2016 7:56:01 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:56:01','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000182
+;
+
+-- Nov 4, 2016 7:56:06 PM WIT
+--  
+UPDATE Z_WFScenarioLine SET GrandTotal=-1.000000000000,Updated=TO_DATE('2016-11-04 19:56:06','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE Z_WFScenarioLine_ID=1000183
+;
+
+SELECT register_migration_script('201611042022-SAS-77-WFscenarioER.sql') FROM dual
+;

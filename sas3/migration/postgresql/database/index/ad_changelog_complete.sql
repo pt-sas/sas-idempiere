@@ -1,0 +1,2 @@
+DROP INDEX adempiere.ad_changelog_complete;
+CREATE INDEX ad_changelog_complete ON adempiere.ad_changelog(record_id) WHERE ad_column_id IN (2171,2170,4324,4323,3495,3494,10797,10800) AND newvalue = 'CO';

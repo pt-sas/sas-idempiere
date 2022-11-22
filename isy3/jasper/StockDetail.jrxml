@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="StockDetail" language="groovy" pageWidth="595" pageHeight="842" columnWidth="500" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4a4ef4ed-402d-4b3d-8cf3-dc1a84bd2409">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="139"/>
+	<property name="ireport.y" value="291"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.graphics" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.border" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.size.fix.enabled" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="title"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.2" value="pageHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.keep.first.band.3" value="columnHeader"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.4" value="columnFooter"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.5" value="pageFooter"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="mkl.live"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" isBlankWhenNull="true" fontSize="10">
+		<box leftPadding="5"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="20" isBold="false" pdfFontName="Times-Bold">
+		<box leftPadding="0"/>
+	</style>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Left" fontName="SansSerif" fontSize="10" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="5">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="8" pdfFontName="Times-Roman"/>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" fontSize="10" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" fontSize="10" pdfFontName="Times-Roman">
+		<box leftPadding="0" rightPadding="5"/>
+	</style>
+	<style name="Detail Date" style="Detail" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" pattern="dd-MM-yyyy" fontSize="10" pdfFontName="Times-Roman"/>
+	<style name="Strip" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="12" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{COLUMN_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="Classification" class="java.lang.String"/>
+	<parameter name="MovementDate1" class="java.util.Date"/>
+	<parameter name="MovementDate2" class="java.util.Date"/>
+	<parameter name="M_Product_Category_ID" class="java.lang.Integer"/>
+	<parameter name="Value" class="java.lang.String"/>
+	<parameter name="M_Product_ID" class="java.lang.Integer"/>
+	<parameter name="M_Locator_ID" class="java.lang.Integer"/>
+	<parameter name="M_Warehouse_ID" class="java.lang.Integer"/>
+	<parameter name="AD_Org_ID" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT z.*
+FROM
+(SELECT
+	sub.ORG_NAME,
+	sub.PRODUCT_CATEGORY,
+	sub.PRODUCT_CODE,
+	sub.PRODUCT_NAME,
+	'BEGINING BALANCE' as DOCUMENTNO,
+	sub.LOCATOR,
+	sub.WAREHOUSE,
+	sub.Classification,
+	0 as MOVEMENTQTY,
+	sub.QTYONHAND-sub.GAP_MUTASI-sub.MUTASI as QTYONHAND,
+	TO_DATE('01/01/1990','dd/mm/yyyy') as MOVEMENTDATE,
+	NULL as MOVEMENTTYPE,
+	NULL as DOCTYPE,
+	NULL as UOM
+
+FROM (
+SELECT
+	parse('AD_Org',l.AD_Org_ID,1) ORG_NAME,
+	pc.Name PRODUCT_CATEGORY,
+	p.Value PRODUCT_CODE,
+	p.Name PRODUCT_NAME,
+	l.Value LOCATOR,
+	parse('M_Warehouse',l.M_Warehouse_ID,1) WAREHOUSE,
+	p.Classification,
+	ref.Name CLASS_NAME,
+	GETSTOCK(p.M_Product_ID,Null,$P{MovementDate1}::date,$P{MovementDate2}::date,Null,Null,NULL,l.M_Locator_ID) MUTASI,
+	GETSTOCK(p.M_Product_ID,Null,adddays($P{MovementDate2}::date,1),adddays(current_date::date,500),Null,Null,NULL,l.M_Locator_ID) GAP_MUTASI,
+	SUM(s.QtyOnHand) QTYONHAND
+
+FROM M_Product p
+INNER JOIN M_Product_Category pc ON (pc.M_Product_Category_ID = p.M_Product_Category_ID)
+INNER JOIN M_Storage s ON (s.M_Product_ID = p.M_Product_ID)
+LEFT JOIN C_UOM uom ON (uom.C_UOM_ID = p.C_UOM_ID)
+INNER JOIN M_Locator l ON (l.M_Locator_ID = s.M_Locator_ID)
+LEFT JOIN AD_Ref_List ref ON (ref.Value=p.Classification AND ref.AD_Reference_ID = 550063)
+WHERE 1=1
+	AND p.Classification LIKE (case when $P{Classification} = '' then '%' else COALESCE($P{Classification},p.Classification) end)
+	AND p.Value LIKE (case when $P{Value} = '' then '%' else p.Value end)
+	AND p.M_Product_ID = COALESCE($P{M_Product_ID}::int,p.M_Product_ID)
+	AND p.M_Product_Category_ID = COALESCE($P{M_Product_Category_ID}::int,p.M_Product_Category_ID)
+	AND l.M_Warehouse_ID = COALESCE($P{M_Warehouse_ID}::int,l.M_Warehouse_ID)
+	AND l.M_Locator_ID = COALESCE($P{M_Locator_ID}::int,l.M_Locator_ID)
+	AND l.AD_Org_ID = COALESCE($P{AD_Org_ID}::int,l.AD_Org_ID)
+GROUP BY l.AD_Org_ID, pc.Name, p.Value, p.Name, uom.Name,
+	uom.Description, l.Value, l.M_Warehouse_ID, p.Classification, ref.Name, p.M_Product_ID,
+	l.M_Locator_ID
+ORDER BY parse('AD_Org',l.AD_Org_ID,1),l.value,p.Classification,p.Value)  sub
+
+UNION ALL
+
+SELECT
+	parse('AD_Org',l.AD_Org_ID,1) as ORG_NAME,
+	pc.name as PRODUCT_CATEGORY,
+	p.value as PRODUCT_CODE,
+	p.name as PRODUCT_NAME,
+	COALESCE(io.documentno,i.documentno,m.documentno,pr.documentno,pi.description,cc.documentno) DOCUMENTNO,
+	l.value as LOCATOR,
+	w.value as WAREHOUSE,
+	p.Classification as CLASSIFICATION,
+	SUM(t.movementqty) as MOVEMENTQTY,
+	0 as QTYONHAND,
+	t.movementdate,
+	(SELECT NAME FROM AD_Ref_List WHERE VALUE = t.movementtype) MOVEMENTTYPE,
+	parse('C_DocType',COALESCE(io.C_DocType_ID,i.C_DocType_ID,m.C_DocType_ID,cc.C_DocType_ID),0) DOCTYPE,
+	parse('C_UOM',p.c_uom_id,1) UOM
+FROM M_Transaction t
+join m_product p on p.m_product_id = t.m_product_id
+join M_Product_Category pc ON pc.M_Product_Category_ID = p.M_Product_Category_ID
+join m_locator l on l.m_locator_id = t.m_locator_id
+join m_warehouse w on w.m_warehouse_id = l.m_warehouse_id
+
+left join m_inoutline iol on iol.m_inoutline_id = t.m_inoutline_id
+left join m_inout io on iol.m_inout_id = io.m_inout_id
+
+left join m_inventoryline il on il.m_inventoryline_id = t.m_inventoryline_id
+left join m_inventory i on il.m_inventory_id = i.m_inventory_id
+
+left join m_movementline ml on ml.m_movementline_id = t.m_movementline_id
+left join m_movement m on ml.m_movement_id = m.m_movement_id
+
+left join m_productionline pl on pl.m_productionline_id = t.m_productionline_id
+left join m_production pr on pr.m_production_id = pl.m_production_id
+
+left join c_projectissue pi on pi.c_projectissue_id = t.c_projectissue_id
+left join pp_cost_collector cc on cc.pp_cost_collector_id = t.pp_cost_collector_id
+
+WHERE 1=1
+	AND p.Classification LIKE (case when $P{Classification} = '' then '%' else COALESCE($P{Classification},p.Classification) end)
+	AND p.Value LIKE (case when $P{Value} = '' then '%' else p.Value end)
+	AND p.M_Product_ID = COALESCE($P{M_Product_ID}::int,p.M_Product_ID)
+	AND p.M_Product_Category_ID = COALESCE($P{M_Product_Category_ID}::int,p.M_Product_Category_ID)
+	AND l.M_Warehouse_ID = COALESCE($P{M_Warehouse_ID}::int,l.M_Warehouse_ID)
+	AND l.M_Locator_ID = COALESCE($P{M_Locator_ID}::int,l.M_Locator_ID)
+	AND l.AD_Org_ID = COALESCE($P{AD_Org_ID}::int,l.AD_Org_ID)
+	AND t.movementdate between $P{MovementDate1} AND $P{MovementDate2}
+GROUP BY p.m_product_id, l.ad_org_id, pc.name, COALESCE(io.documentno,i.documentno,m.documentno,pr.documentno,pi.description,cc.documentno),
+	l.value, w.value, t.movementdate, t.movementtype, COALESCE(io.C_DocType_ID,i.C_DocType_ID,m.C_DocType_ID,cc.C_DocType_ID)) z
+ORDER BY z.ORG_NAME, z.LOCATOR, z.CLASSIFICATION, z.PRODUCT_NAME, z.MOVEMENTDATE]]>
+	</queryString>
+	<field name="PRODUCT_CATEGORY" class="java.lang.String"/>
+	<field name="PRODUCT_CODE" class="java.lang.String"/>
+	<field name="PRODUCT_NAME" class="java.lang.String"/>
+	<field name="LOCATOR" class="java.lang.String"/>
+	<field name="WAREHOUSE" class="java.lang.String"/>
+	<field name="CLASSIFICATION" class="java.lang.String"/>
+	<field name="ORG_NAME" class="java.lang.String"/>
+	<field name="QTYONHAND" class="java.math.BigDecimal"/>
+	<field name="MOVEMENTQTY" class="java.math.BigDecimal"/>
+	<field name="DOCUMENTNO" class="java.lang.String"/>
+	<field name="MOVEMENTDATE" class="java.util.Date"/>
+	<field name="DOCTYPE" class="java.lang.String"/>
+	<field name="MOVEMENTTYPE" class="java.lang.String"/>
+	<field name="UOM" class="java.lang.String"/>
+	<variable name="CLASS" class="java.lang.String">
+		<variableExpression><![CDATA[$F{CLASSIFICATION}==null ? "AAAA":$F{CLASSIFICATION}]]></variableExpression>
+	</variable>
+	<variable name="BALANCE" class="java.math.BigDecimal" resetType="Group" resetGroup="PRODUCT" calculation="Sum">
+		<variableExpression><![CDATA[$F{QTYONHAND}+$F{MOVEMENTQTY}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_BALANCE" class="java.math.BigDecimal" resetType="Group" resetGroup="PRODUCT" calculation="Sum">
+		<variableExpression><![CDATA[$F{QTYONHAND}+$F{MOVEMENTQTY}]]></variableExpression>
+	</variable>
+	<group name="ORG">
+		<groupExpression><![CDATA[$F{ORG_NAME}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="46968e07-11ba-4610-81ce-dc8551e61b28" style="Default" mode="Opaque" x="0" y="0" width="554" height="20" forecolor="#FFFFFF" backcolor="#000000"/>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ORGANIZATION: "+$F{ORG_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="LOCATOR">
+		<groupExpression><![CDATA[$F{LOCATOR}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="7dbcd813-4fd0-4dd4-9c5c-36de49d5f546" style="Default" mode="Opaque" x="0" y="0" width="554" height="20" forecolor="#000000" backcolor="#A8A8A8"/>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["LOCATOR: "+$F{LOCATOR}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="CLASS">
+		<groupExpression><![CDATA[$V{CLASS}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement uuid="c24b0638-8770-48e6-aa6e-ff4a3d75a6b6" style="Default" mode="Opaque" x="0" y="0" width="554" height="20" backcolor="#C7C7C7">
+						<property name="local_mesure_unitx" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					</reportElement>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CLASSIFICATION: "+ $F{CLASSIFICATION}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="PRODUCT">
+		<groupExpression><![CDATA[$F{PRODUCT_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement uuid="303f2a93-9be5-4c34-af34-9ecf19bf7132" style="Default" mode="Opaque" x="0" y="0" width="554" height="20" backcolor="#D6D6D6"/>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["PRODUCT CODE: "+ $F{PRODUCT_CODE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement uuid="9f62157e-44a1-49ec-8238-fc98fa6a26e1" style="Default" x="0" y="20" width="554" height="20"/>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font size="10" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PRODUCT_NAME} + $F{UOM}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="20">
+				<textField isStretchWithOverflow="true" pattern="#,##0.###">
+					<reportElement uuid="6e35bbd8-9893-4f0d-94f0-3523a7afd293" style="Default" x="432" y="0" width="79" height="20" isRemoveLineWhenBlank="true"/>
+					<box>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font size="10" isBold="true" isItalic="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{TOTAL_BALANCE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="57e64261-ea41-4b9c-870c-872b04c02eca" x="510" y="0" width="44" height="20"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{UOM}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="236" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="42751d57-e186-4694-baf0-16c9d4bdea08" style="Title" x="100" y="0" width="454" height="44"/>
+				<textElement/>
+				<text><![CDATA[STOCK DETAIL REPORT]]></text>
+			</staticText>
+			<image scaleImage="RealSize" onErrorType="Blank">
+				<reportElement uuid="1d8431f5-9554-4f99-9ef6-eae371c5e5e9" mode="Transparent" x="0" y="0" width="177" height="50"/>
+				<imageExpression><![CDATA["http://erp:8090/reports/logo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="51c28843-45f2-49d4-be4e-77dcc4cb2ada" style="Default" x="2" y="83" width="114" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<text><![CDATA[Movement Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd379506-beb8-45fe-a499-0ccaaf9daa6d" style="Default" x="116" y="83" width="17" height="20" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="bd5b56e0-027c-4c5f-b7fa-b79aedaab13f" x="133" y="83" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{MovementDate1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="38fa7d04-b892-4e42-af4a-04bfa58f7d41" style="Default" x="233" y="83" width="17" height="20" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="f3c1eb33-00fd-4e5e-82c5-49c543a3021b" x="250" y="83" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{MovementDate2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f653a25c-dc88-4516-b832-0f1d0dbfc632" style="Default" x="116" y="103" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40a52669-6cf7-4d8b-9965-e44aabf7d503" style="Default" x="2" y="103" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e7d57eb7-0f91-46e9-a380-88790d448bb5" style="Default" x="133" y="103" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c060c8eb-be5e-4c43-ab6b-2387cb34b641" style="Default" x="116" y="143" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a14f6a89-cd66-4753-807f-290c02f24395" style="Default" x="2" y="143" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Classification]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8093750d-fa0f-4535-86a1-90b27f1a4efc" x="133" y="143" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Classification}!=null && !$P{Classification}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Classification}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2421bb76-3153-4de0-8c01-49e414d1efb1" style="Default" x="116" y="123" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b16996d3-7b62-49f5-ad66-a021a43fffd6" style="Default" x="2" y="123" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product Code]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2c70939e-add3-4145-bbe7-1e52477780d6" x="133" y="123" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{Value}!=null && !$P{Value}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{Value}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d2f8efb2-e0bd-4ce6-966c-cea58cdd45c6" style="Default" x="116" y="163" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="14490ef9-370a-4195-aa1e-d7862e1d04a1" style="Default" x="2" y="163" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Product Category]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="11ecb3f6-f160-4e3a-89d7-abf4bc55da87" x="133" y="163" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Product_Category_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{PRODUCT_CATEGORY}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d837fb8c-68f5-46ba-a6ac-62d834fba456" style="Default" x="2" y="183" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Warehouse]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="60721d56-4c81-40a5-bf65-c744b3af41ed" style="Default" x="116" y="183" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="27454b85-cbf8-442e-a3e0-934715237b15" x="133" y="183" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Warehouse_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{WAREHOUSE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6ded7605-bec8-4c82-ad02-7681f29fed66" style="Default" x="2" y="203" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Locator]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e9b5502-0a6d-4cad-abb6-96184e30c606" style="Default" x="116" y="203" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7c47aaef-ff07-411b-95b4-cc592cf622fc" x="133" y="203" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{M_Locator_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{LOCATOR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="df5a48cd-c669-447c-b7a4-cccdd1e68789" style="Default" x="2" y="63" width="114" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{AD_Org_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Organization]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c2704ba1-b220-4f52-8c23-cf98a6f56f17" style="Default" x="133" y="63" width="217" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{AD_Org_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ORG_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="aafd1a35-30e4-4d7b-8826-ee5fc0993cd0" style="Default" x="116" y="63" width="17" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{AD_Org_ID} > 0]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="84f17af8-43af-42ac-ae82-ba1ca82fa1fa" style="Default" x="100" y="0" width="150" height="20"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[DESCRIPTION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3d205de-945c-4e5c-b26b-de4bc33c0413" style="Default" x="432" y="0" width="79" height="20"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[BALANCE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2ba56636-03c1-44db-8f7d-29e8754946dc" style="Default" x="354" y="0" width="79" height="20"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3598f43b-59ee-4ddd-ac5a-0c58bbc3bba7" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[MOVEMENTDATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d401d12-05ce-48fa-8eb5-7f3f52b37b69" x="250" y="0" width="104" height="20"/>
+				<textElement/>
+				<text><![CDATA[DOCTYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3d205de-945c-4e5c-b26b-de4bc33c0413" style="Default" x="511" y="0" width="44" height="20"/>
+				<box rightPadding="3">
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[UOM]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8e224453-5955-4c83-ba4f-45e64b5b75b4" style="Default" stretchType="RelativeToBandHeight" x="72" y="0" width="137" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DOCUMENTNO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.###">
+				<reportElement uuid="a913153f-8c8e-44ac-81ab-f3a2dbbb8439" style="Default" x="354" y="0" width="79" height="20" isRemoveLineWhenBlank="true"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{MOVEMENTQTY}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.###">
+				<reportElement uuid="386fb93d-c4d2-4fc6-86da-9d44e379faab" style="Default" x="432" y="0" width="79" height="20" isRemoveLineWhenBlank="true"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false" isItalic="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{BALANCE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="032d28a0-d443-4d0c-ae56-e86c15a2ede7" x="0" y="0" width="72" height="20">
+					<printWhenExpression><![CDATA[!$F{DOCUMENTNO}.equalsIgnoreCase( "BEGINING BALANCE" )]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{MOVEMENTDATE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="fcdc0433-543b-4e02-bbde-828a26538994" x="209" y="0" width="145" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[($F{DOCTYPE} != null)?$F{DOCTYPE}:$F{MOVEMENTTYPE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

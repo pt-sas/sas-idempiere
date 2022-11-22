@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="postgres-jdbc-16706194663-163b2eecbb125cd5" provider="postgresql" driver="postgres-jdbc" name="PostgreSQL - sastrx" save-password="true" show-system-objects="true" show-util-objects="true" read-only="false">
+		<connection host="sas" port="5432" server="" database="sastrx" url="jdbc:postgresql://sas:5432/sastrx" user="sastrx" password="FAsPJEROVCkVFQc6Gh9LNsc=" type="dev">
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+		</connection>
+	</data-source>
+	<data-source id="postgres-jdbc-167081d151c-a2e1d7fb53172cb" provider="postgresql" driver="postgres-jdbc" name="PostgreSQL - sastrx 2" save-password="true" show-system-objects="true" show-util-objects="true" read-only="false">
+		<connection host="dev1" port="5432" server="" database="sastrx" url="jdbc:postgresql://dev1:5432/sastrx" user="sastrx" password="AAUVNFNbJPc=" type="dev">
+			<provider-property name="@dbeaver-show-non-default-db@" value="true"/>
+			<provider-property name="@dbeaver-show-template-db@" value="false"/>
+		</connection>
+	</data-source>
+	<filters/>
+</data-sources>

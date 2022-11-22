@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CustomerReturn" language="groovy" pageWidth="459" pageHeight="595" columnWidth="445" leftMargin="7" rightMargin="7" topMargin="7" bottomMargin="7" uuid="392d507a-f481-46f5-872c-8d003d3d9f08">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="72"/>
+	<property name="ireport.background.image" value="C:\Users\yosef\Downloads\nota claim 1.jpg"/>
+	<property name="ireport.background.image.properties" value="true,true,0.25,-4,-8,0,0,627,811"/>
+	<style name="Default" isDefault="true" hAlign="Left" vAlign="Middle" fontSize="10">
+		<box leftPadding="2"/>
+	</style>
+	<style name="Title" style="Default" forecolor="#000000" hAlign="Center" vAlign="Middle" fontName="SansSerif" fontSize="14" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="Header" style="Default" forecolor="#000000" hAlign="Center" fontName="SansSerif" fontSize="10" isBold="true" pdfFontName="Times-Roman">
+		<box leftPadding="0">
+			<topPen lineWidth="1.0" lineStyle="Double"/>
+			<bottomPen lineWidth="1.0" lineStyle="Double"/>
+		</box>
+	</style>
+	<style name="Detail" style="Default" mode="Transparent" hAlign="Left" vAlign="Middle" markup="none" fontSize="9" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Qty" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Detail Amt" style="Detail" mode="Transparent" hAlign="Right" vAlign="Middle" markup="none" pattern="#,##0.00" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<style name="Group" hAlign="Left" vAlign="Middle" fontSize="12" isBold="true">
+		<box leftPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Qty" hAlign="Right" vAlign="Middle" pattern="#,##0" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<style name="Group Amt" hAlign="Right" vAlign="Middle" pattern="#,##0.00" fontSize="12" isBold="true">
+		<box leftPadding="0" rightPadding="2">
+			<topPen lineWidth="1.0"/>
+		</box>
+	</style>
+	<parameter name="RECORD_ID" class="java.lang.Integer"/>
+	<parameter name="M_InOut_ID" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT
+	p.Value PRODUCT_CODE,
+	p.Name PRODUCT_NAME,
+	uom.UOMSymbol,
+	parse('C_UOM',iol.C_UOM_ID,1) UOM,
+	iol.QtyEntered,
+	iol.Description LINEDESC,
+	parse('C_BPartner',io.C_BPartner_ID,0) BP_VALUE,
+	parse('C_BPartner',io.C_BPartner_ID,1) BP_NAME,
+	io.DocumentNo,
+	io.MovementDate,
+	io.Description,
+	parse('M_Warehouse',io.M_Warehouse_ID,1) WHS,
+	o.DocumentNo ORDERNO,
+	parse('AD_User',io.SalesRep_ID,1) SALES_REP,
+	parse('M_Locator',iol.M_Locator_ID,0) LOCATOR,
+	parse('AD_User',io.createdBy,1) CREATEDBY,
+	parse('AD_User',io.UpdatedBy,1) UPDATEDBY,
+	GETREFLIST('ALL','DOCSTATUS',io.DocStatus) DocStatus,
+	iol.M_AttributeSetInstance_ID,
+	l.Address1,
+	l.Address2,
+	l.Address3,
+	l.City
+FROM M_InOutLine iol
+LEFT JOIN M_Product p ON (p.M_Product_ID = iol.M_Product_ID)
+INNER JOIN C_UOM uom ON (uom.C_UOM_ID = iol.C_UOM_ID)
+INNER JOIN M_InOut io ON (io.M_InOut_ID = iol.M_InOut_ID)
+LEFT JOIN C_Order o ON (o.C_Order_ID = io.C_Order_ID)
+LEFT JOIN C_BPartner_Location bpl ON (bpl.C_BPartner_Location_ID = io.C_BPartner_Location_ID)
+LEFT JOIN C_Location l ON (l.C_Location_ID = bpl.C_Location_ID)
+WHERE	1 = 1
+	AND iol.M_InOut_ID = COALESCE($P{RECORD_ID},$P{M_InOut_ID})
+ORDER BY iol.Line]]>
+	</queryString>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="uomsymbol" class="java.lang.String"/>
+	<field name="uom" class="java.lang.String"/>
+	<field name="qtyentered" class="java.math.BigDecimal"/>
+	<field name="linedesc" class="java.lang.String"/>
+	<field name="bp_value" class="java.lang.String"/>
+	<field name="bp_name" class="java.lang.String"/>
+	<field name="documentno" class="java.lang.String"/>
+	<field name="movementdate" class="java.sql.Timestamp"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="whs" class="java.lang.String"/>
+	<field name="orderno" class="java.lang.String"/>
+	<field name="sales_rep" class="java.lang.String"/>
+	<field name="locator" class="java.lang.String"/>
+	<field name="createdby" class="java.lang.String"/>
+	<field name="updatedby" class="java.lang.String"/>
+	<field name="docstatus" class="java.lang.String"/>
+	<field name="m_attributesetinstance_id" class="java.math.BigDecimal"/>
+	<field name="address1" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<field name="address3" class="java.lang.String"/>
+	<field name="city" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="142" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e01cc1e4-6986-4152-a1f0-cd8d8d8463a8" x="108" y="60" width="170" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="502fa354-6bdb-4126-a991-5b1de0b3b89d" x="0" y="36" width="445" height="17"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{documentno}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="16f2fe47-05d7-4c77-9da1-95ad29c34af5" x="339" y="60" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{movementdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7d2135a3-04bf-419a-97d4-332aba8efa3d" x="109" y="86" width="169" height="29"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{address1} + ", " + $F{address2} + ", " + $F{address3} + ", " +$F{city}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="317" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="17817508-5276-47b6-9596-592fcf84d48c" x="39" y="0" width="59" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_code}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8d7f275d-bf09-4a4f-8a06-6776b6814f8f" x="99" y="0" width="179" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="375a9223-7e26-4b0e-9f0c-282f1006fba7" x="278" y="0" width="52" height="20"/>
+				<box leftPadding="2" rightPadding="2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtyentered}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d02e53a9-0713-466f-957c-913ee0739d42" x="330" y="0" width="100" height="20"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{linedesc}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="122" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="c4ce747a-b774-4159-b532-67a7e3bedd31" x="278" y="111" width="167" height="11"/>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

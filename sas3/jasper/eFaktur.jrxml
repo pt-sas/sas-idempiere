@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="eFaktur" language="groovy" pageWidth="1900" pageHeight="842" columnWidth="1900" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8438d664-f611-49c9-8158-6155dd7e5214">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.rows" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.remove.empty.space.between.columns" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.ignore.cell.border" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.size.fix.enabled" value="true"/>
+	<parameter name="AD_Org_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateInvoiced1" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DateInvoiced2" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[(
+select 'FK' column1
+,'KD_JENIS_TRANSAKSI' column2
+,'FG_PENGGANTI' column3
+,'NOMOR_FAKTUR' column4
+,'MASA_PAJAK' column5
+,'TAHUN_PAJAK' column6
+,'TANGGAL_FAKTUR' column7
+,'NPWP' column8
+,'NAMA' column9
+,'ALAMAT_LENGKAP' column10
+,'JUMLAH_DPP' column11
+,'JUMLAH_PPN' column12
+,'JUMLAH_PPNBM' column13
+,'ID_KETERANGAN_TAMBAHAN' column14
+,'FG_UANG_MUKA' column15
+,'UANG_MUKA_DPP' column16
+,'UANG_MUKA_PPN' column17
+,'UANG_MUKA_PPNBM' column18
+,'REFERENSI' column19
+,null::date column20
+,'dihapus' column21
+,null::integer AD_Client_ID
+,null::integer AD_Org_ID
+from dual
+)
+union all
+(
+select 'LT' column1
+,'NPWP' column2
+,'NAMA' column3
+,'JALAN' column4
+,'BLOK' column5
+,'NOMOR' column6
+,'RT' column7
+,'RW' column8
+,'KECAMATAN' column9
+,'KELURAHAN' column10
+,'KABUPATEN' column11
+,'PROPINSI' column12
+,'KODE_POS' column13
+,'NOMOR_TELEPON' column14
+,'' column15
+,'' column16
+,'' column17
+,'' column18
+,'' column19
+,null::date column20
+,'dihapus' column21
+,null::integer AD_Client_ID
+,null::integer AD_Org_ID
+from dual
+)
+union all
+(
+select
+'OF' column1
+,'KODE_OBJEK' column2
+,'NAMA' column3
+,'HARGA_SATUAN' column4
+,'JUMLAH_BARANG' column5
+,'HARGA_TOTAL' column6
+,'DISKON' column7
+,'DPP' column8
+,'PPN' column9
+,'TARIF_PPNBM' column10
+,'PPNBM' column11
+,'' column12
+,'' column13
+,'' column14
+,'' column15
+,'' column16
+,'' column17
+,'' column18
+,'' column19
+,null::date column20
+,'dihapus' column21
+,null::integer AD_Client_ID
+,null::integer AD_Org_ID
+from dual
+)
+union all
+select
+z.column1
+,z.column2
+,z.column3
+,z.column4
+,z.column5
+,z.column6
+,z.column7
+,z.column8
+,z.column9
+,z.column10
+,z.column11::varchar
+,z.column12
+,z.column13
+,z.column14
+,z.column15
+,z.column16
+,z.column17
+,z.column18
+,z.column19
+,z.column20
+,z.column21
+,z.AD_Client_ID
+,z.AD_Org_ID
+from
+(
+((
+select distinct 'FK' column1
+, substr(replace(replace(ti.documentno,'-',''),'.',''),1,2) column2
+, substr(replace(replace(ti.documentno,'-',''),'.',''),3,1) column3
+, substr(replace(replace(ti.documentno,'-',''),'.',''),4,15) column4
+, trim(leading '0' from to_char(a.dateinvoiced,'MM')) column5
+, to_char(a.dateinvoiced,'YYYY') column6
+, to_char(a.dateinvoiced,'dd/MM/yyyy') column7
+, replace(replace(c.taxid,'-',''),'.','') column8
+, case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end as column9
+,replace (coalesce(e.address1, '') || ' ' || coalesce (e.address2, '') || ' ' || coalesce (e.address3, '') || ' '|| coalesce (e.address4, '') || ' ' || coalesce (e.City, '') || ' ' || coalesce (e.Postal, ''), '  ', ' ') as column10
+,trunc(invtax.taxbaseamt * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))::varchar column11
+,trunc(invtax.taxbaseamt * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) * 0.1)::varchar column12
+,'0' column13
+,'' column14
+,'0' column15
+,'0' column16
+,'0' column17
+,'0' column18
+,'Invoice No : ' || a.documentno column19
+,a.dateinvoiced::timestamp::date column20
+,org.name::varchar column21
+,org.AD_Client_ID
+,org.AD_Org_ID
+,a.c_invoice_id
+,0 line
+from      c_invoice a
+join 		ad_org ao on a.ad_org_id=ao.ad_org_id
+join            c_invoicetax invtax on invtax.c_invoice_id = a.c_invoice_id and invtax.taxbaseamt > 0
+join            c_doctype type on type.c_doctype_id = a.c_doctype_id and upper(type.name) like '%AR%INV%'
+join            c_invoiceline b on b.c_invoice_id = a.c_invoice_id --and b.taxamt > 0
+join			z_taxinvoice ti on (ti.z_taxinvoice_id=a.z_taxinvoice_id)
+left join      	c_bpartner c on a.c_bpartner_id = c.c_bpartner_id
+left join    	c_bpartner_location d on a.c_bpartner_location_id = d.c_bpartner_location_id
+left join       c_location e on d.c_location_id = e.c_location_id
+left join	c_greeting g on (c.c_greeting_id = g.c_greeting_id)
+left join m_product p on b.m_product_id=p.m_product_id
+left join c_uom cu on (b.c_uom_id=cu.c_uom_id)
+left join c_currency cc on a.c_currency_id=cc.c_currency_id
+left join c_conversion_rate ccr on (a.c_conversiontype_id=ccr.c_conversiontype_id and a.c_currency_id=ccr.c_currency_id and ccr.c_currency_id_to=303
+  and a.dateinvoiced >= ccr.validfrom and a.dateinvoiced <= ccr.validto)
+left join c_conversion_rate ccr2 on ((select c_conversiontype_id from c_conversiontype where AD_Client_ID=1000007 and isDefault='Y')=ccr2.c_conversiontype_id and a.c_currency_id=ccr2.c_currency_id and ccr2.c_currency_id_to=303
+  and a.dateinvoiced >= ccr2.validfrom and a.dateinvoiced <= ccr2.validto)
+LEFT JOIN M_Product_Category mpc on (p.M_Product_Category_ID=mpc.M_Product_Category_ID)
+join c_doctype doctype on doctype.c_doctype_id = a.c_doctype_id and doctype.printname = 'Invoice'
+join ad_org org on org.ad_org_id = a.ad_org_id
+where   a.issotrx = 'Y'
+and b.isprinted = 'Y'
+and a.docstatus in ('CO','CL')
+and trim(ti.documentno) is not null
+and a.ad_org_id = coalesce($P{AD_Org_ID},a.ad_org_id)
+and a.dateinvoiced >= coalesce($P{DateInvoiced1},a.dateinvoiced)
+and a.dateinvoiced <= coalesce($P{DateInvoiced2},a.dateinvoiced)
+group by a.documentno,case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end, e.address1,
+          e.address2,
+          e.address3,
+          e.city||' '||coalesce(e.postal,''),
+c.taxid,
+b.qtyinvoiced,
+b.priceactual
+,b.description, a.c_invoice_id, a.dateinvoiced, d.name, e.c_location_id, b.c_invoiceline_id, p.value, p.name, p.description
+,ccr.multiplyrate, cc.iso_code, cc.c_currency_id, b.pricelist, cu.name, substring(ao.description, 5, 30), g.c_greeting_id, c.name
+,ccr2.multiplyrate
+,mpc.Value
+,mpc.m_product_category_id
+,invtax.taxbaseamt
+,org.name
+,org.AD_Client_ID
+,org.AD_Org_ID
+,ti.documentno
+)
+union all
+(
+select distinct 'OF' column1
+,replace(replace(regexp_replace(coalesce(p.value,b.description), E'[\\n\\r]+', ' '),'"',' inch'),';',' ') column2
+,replace(replace(regexp_replace(coalesce(replace((coalesce(p.value,b.description)||' '||coalesce((
+          coalesce((case
+          when b.Description IS NOT NULL THEN (case when instr(b.description,';') >0 then coalesce((substr(b.description,(case when instr(b.description,';') >0 then instr(b.description,';') else 1 end)+1,200))) else b.description end)
+          when b.M_Product_ID>0 THEN p.Description
+          else coalesce((substr(b.description,(case when instr(b.description,';') >0 then instr(b.description,';') else 1 end)+1,200)))
+          end),b.description)
+          ),'')|| ' ' || '(' || coalesce(mpc.Value,'') || ')'),';',' '),''), E'[\\n\\r]+', ' '),'"', ' inch'), ';', ' ') as column3
+,trunc(CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual *
+	currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id)END, 2)::varchar as column4
+,trunc(b.qtyinvoiced,2)::varchar column5
+,trunc((avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual *
+	currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))
+	*qtyinvoiced)/b.qtyinvoiced from c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual *
+	currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) END)))*b.qtyinvoiced )::varchar column6
+,'0' column7
+,trunc((avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual END)))*b.qtyinvoiced
+	* currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id),2 )::varchar column8
+,trunc(((((avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual END)))*b.qtyinvoiced
+	* currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))-0)*0.1),2)::varchar column9
+,'0' column10
+,'0' column11
+,'' column12
+,'' column13
+,'' column14
+,'' column15
+,'' column16
+,'' column17
+,'' column18
+,'' column19
+,a.dateinvoiced::timestamp::date column20
+,org.name::varchar column21
+,org.AD_Client_ID
+,org.AD_Org_ID
+,a.c_invoice_id
+,b.line
+from      c_invoice a
+join 		ad_org ao on a.ad_org_id=ao.ad_org_id
+join            c_invoicetax invtax on invtax.c_invoice_id = a.c_invoice_id and invtax.taxbaseamt > 0
+join            c_doctype type on type.c_doctype_id = a.c_doctype_id and upper(type.name) like '%AR%INV%'
+join			z_taxinvoice ti on (ti.z_taxinvoice_id=a.z_taxinvoice_id)
+left join       c_invoiceline b on b.c_invoice_id = a.c_invoice_id
+left join      	c_bpartner c on a.c_bpartner_id = c.c_bpartner_id
+left join    	c_bpartner_location d on a.c_bpartner_location_id = d.c_bpartner_location_id
+left join       c_location e on d.c_location_id = e.c_location_id
+left join	c_greeting g on (c.c_greeting_id = g.c_greeting_id)
+left join m_product p on b.m_product_id=p.m_product_id
+left join c_uom cu on (b.c_uom_id=cu.c_uom_id)
+left join c_currency cc on a.c_currency_id=cc.c_currency_id
+left join c_conversion_rate ccr on (a.c_conversiontype_id=ccr.c_conversiontype_id and a.c_currency_id=ccr.c_currency_id and ccr.c_currency_id_to=303
+  and a.dateinvoiced >= ccr.validfrom and a.dateinvoiced <= ccr.validto)
+left join c_conversion_rate ccr2 on ((select c_conversiontype_id from c_conversiontype where AD_Client_ID=1000007 and isDefault='Y')=ccr2.c_conversiontype_id and a.c_currency_id=ccr2.c_currency_id and ccr2.c_currency_id_to=303
+  and a.dateinvoiced >= ccr2.validfrom and a.dateinvoiced <= ccr2.validto)
+LEFT JOIN M_Product_Category mpc on (p.M_Product_Category_ID=mpc.M_Product_Category_ID)
+join c_doctype doctype on doctype.c_doctype_id = a.c_doctype_id and doctype.printname = 'Invoice'
+join ad_org org on org.ad_org_id = a.ad_org_id
+where   a.issotrx = 'Y'
+and b.isprinted = 'Y'
+and a.docstatus in ('CO','CL')
+and trim(ti.documentno) is not null
+and a.ad_org_id = coalesce($P{AD_Org_ID},a.ad_org_id)
+and a.dateinvoiced >= coalesce($P{DateInvoiced1},a.dateinvoiced)
+and a.dateinvoiced <= coalesce($P{DateInvoiced2},a.dateinvoiced)
+group by a.documentno,case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end, e.address1,
+          e.address2,
+          e.address3,
+          e.city||' '||coalesce(e.postal,''),
+c.taxid,
+b.qtyinvoiced,
+b.priceactual
+,b.description, a.c_invoice_id, a.dateinvoiced, d.name, e.c_location_id, b.c_invoiceline_id, p.value, p.name, p.description
+,ccr.multiplyrate, cc.iso_code, cc.c_currency_id, b.pricelist, cu.name, substring(ao.description, 5, 30), g.c_greeting_id, c.name
+,ccr2.multiplyrate
+,mpc.Value
+,mpc.m_product_category_id
+,org.name
+,org.AD_Client_ID
+,org.AD_Org_ID
+,ti.documentno
+order by b.line
+)
+union all
+(
+select distinct 'FK' column1
+, substr(replace(replace(ti.documentno,'-',''),'.',''),1,2) column2
+, substr(replace(replace(ti.documentno,'-',''),'.',''),3,1) column3
+, substr(replace(replace(ti.documentno,'-',''),'.',''),4,15) column4
+, trim(leading '0' from to_char(a.dateinvoiced,'MM')) column5
+, to_char(a.dateinvoiced,'YYYY') column6
+, to_char(a.dateinvoiced,'dd/MM/yyyy') column7
+, replace(replace(c.taxid,'-',''),'.','') column8
+, case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end as column9
+,replace (coalesce(e.address1, '') || ' ' || coalesce (e.address2, '') || ' ' || coalesce (e.address3, '') || ' '|| coalesce (e.address4, '') || ' ' || coalesce (e.City, '') || ' ' || coalesce (e.Postal, ''), '  ', ' ') as column10
+,trunc(co.totallines * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))::varchar column11
+,trunc(co.totallines * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) * 0.1)::varchar column12
+,'0' column13
+,'' column14
+,'1' column15
+,round(invtax.taxbaseamt * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) ,2)::varchar column16
+,trunc(invtax.taxbaseamt * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id)*0.1 ,2)::varchar column17
+,'0' column18
+,'Invoice No : ' || a.documentno column19
+,a.dateinvoiced::timestamp::date column20
+,org.name::varchar column21
+,org.AD_Client_ID
+,org.AD_Org_ID
+,a.c_invoice_id
+,0 line
+from      c_invoice a
+join 		ad_org ao on a.ad_org_id=ao.ad_org_id
+join            c_invoicetax invtax on invtax.c_invoice_id = a.c_invoice_id and invtax.taxbaseamt > 0
+join            c_doctype type on type.c_doctype_id = a.c_doctype_id and upper(type.name) like '%AR%INV%'
+join            c_invoiceline b on b.c_invoice_id = a.c_invoice_id --and b.taxamt > 0
+join			z_taxinvoice ti on (ti.z_taxinvoice_id=a.z_taxinvoice_id)
+left join      	c_bpartner c on a.c_bpartner_id = c.c_bpartner_id
+left join    	c_bpartner_location d on a.c_bpartner_location_id = d.c_bpartner_location_id
+left join       c_location e on d.c_location_id = e.c_location_id
+left join	c_greeting g on (c.c_greeting_id = g.c_greeting_id)
+left join m_product p on b.m_product_id=p.m_product_id
+left join c_uom cu on (b.c_uom_id=cu.c_uom_id)
+left join c_currency cc on a.c_currency_id=cc.c_currency_id
+left join c_conversion_rate ccr on (a.c_conversiontype_id=ccr.c_conversiontype_id and a.c_currency_id=ccr.c_currency_id and ccr.c_currency_id_to=303
+  and a.dateinvoiced >= ccr.validfrom and a.dateinvoiced <= ccr.validto)
+left join c_conversion_rate ccr2 on ((select c_conversiontype_id from c_conversiontype where AD_Client_ID=1000007 and isDefault='Y')=ccr2.c_conversiontype_id and a.c_currency_id=ccr2.c_currency_id and ccr2.c_currency_id_to=303
+  and a.dateinvoiced >= ccr2.validfrom and a.dateinvoiced <= ccr2.validto)
+LEFT JOIN M_Product_Category mpc on (p.M_Product_Category_ID=mpc.M_Product_Category_ID)
+join c_doctype doctype on doctype.c_doctype_id = a.c_doctype_id and doctype.printname like '%AR%Pro%Forma%'
+join ad_org org on org.ad_org_id = a.ad_org_id
+join c_order co on co.c_order_id = a.c_order_id
+where   a.issotrx = 'Y'
+and b.isprinted = 'Y'
+and a.docstatus in ('CO','CL')
+and trim(ti.documentno) is not null
+and a.ad_org_id = coalesce($P{AD_Org_ID},a.ad_org_id)
+and a.dateinvoiced >= coalesce($P{DateInvoiced1},a.dateinvoiced)
+and a.dateinvoiced <= coalesce($P{DateInvoiced2},a.dateinvoiced)
+group by a.documentno,case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end, e.address1,
+          e.address2,
+          e.address3,
+          e.city||' '||coalesce(e.postal,''),
+c.taxid,
+b.qtyinvoiced,
+b.priceactual
+,b.description, a.c_invoice_id, a.dateinvoiced, d.name, e.c_location_id, b.c_invoiceline_id, p.value, p.name, p.description
+,ccr.multiplyrate, cc.iso_code, cc.c_currency_id, b.pricelist, cu.name, substring(ao.description, 5, 30), g.c_greeting_id, c.name
+,ccr2.multiplyrate
+,mpc.Value
+,mpc.m_product_category_id
+,invtax.taxbaseamt
+,co.totallines
+,org.name
+,org.AD_Client_ID
+,org.AD_Org_ID
+,ti.documentno
+)
+union all
+(
+select distinct 'OF' column1
+,replace(regexp_replace(coalesce(p.value,b.description), E'[\\n\\r]+', ' '),'"',' inch') column2
+,replace(regexp_replace(coalesce(replace((coalesce(p.value,b.description)||' '||coalesce((
+          coalesce((case
+          when b.Description IS NOT NULL THEN (case when instr(b.description,';') >0 then coalesce((substr(b.description,(case when instr(b.description,';') >0 then instr(b.description,';') else 1 end)+1,200))) else b.description end)
+          when b.M_Product_ID>0 THEN p.Description
+          else coalesce((substr(b.description,(case when instr(b.description,';') >0 then instr(b.description,';') else 1 end)+1,200)))
+          end),b.description)
+          ),'')|| ' ' || '(' || coalesce(mpc.Value,'') || ')'),';',' '),''),E'[\\n\\r]+', ' '),'"', ' inch') as column3
+,trunc(CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual
+	* currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) END,2)::varchar as column4
+,trunc(col.qtyordered,2)::varchar column5
+,trunc(trunc(avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual END)),0)*col.qtyordered
+	* currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id) )::varchar column6
+,'0' column7
+,trunc((trunc(avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric,
+	a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from
+	c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual END)),0)*col.qtyordered
+	* currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))-0 , 2)::varchar column8
+,trunc(((((avg((CASE WHEN b.priceactual=0 AND b.qtyinvoiced<>0 THEN (select sum((priceactual * currencyrate(a.c_currency_id, 303::numeric, a.dateacct::timestamp with time zone, a.c_conversiontype_id, a.ad_client_id, a.ad_org_id))*qtyinvoiced)/b.qtyinvoiced from c_invoiceline ol where ol.description=b.description and ol.c_invoice_id=b.c_invoice_id) ELSE b.priceactual END)))*col.qtyordered )-0)*0.1),2)::varchar column9
+,'0' column10
+,'0' column11
+,'' column12
+,'' column13
+,'' column14
+,'' column15
+,'' column16
+,'' column17
+,'' column18
+,'' column19
+,a.dateinvoiced::timestamp::date column20
+,org.name::varchar column21
+,org.AD_Client_ID
+,org.AD_Org_ID
+,a.c_invoice_id
+,b.line
+from      c_invoice a
+join 		ad_org ao on a.ad_org_id=ao.ad_org_id
+join            c_invoicetax invtax on invtax.c_invoice_id = a.c_invoice_id and invtax.taxbaseamt > 0
+join            c_doctype type on type.c_doctype_id = a.c_doctype_id and upper(type.name) like '%AR%INV%'
+join			z_taxinvoice ti on (ti.z_taxinvoice_id=a.z_taxinvoice_id)
+left join       c_invoiceline b on b.c_invoice_id = a.c_invoice_id
+left join      	c_bpartner c on a.c_bpartner_id = c.c_bpartner_id
+left join    	c_bpartner_location d on a.c_bpartner_location_id = d.c_bpartner_location_id
+left join       c_location e on d.c_location_id = e.c_location_id
+left join	c_greeting g on (c.c_greeting_id = g.c_greeting_id)
+left join m_product p on b.m_product_id=p.m_product_id
+left join c_uom cu on (b.c_uom_id=cu.c_uom_id)
+left join c_currency cc on a.c_currency_id=cc.c_currency_id
+left join c_conversion_rate ccr on (a.c_conversiontype_id=ccr.c_conversiontype_id and a.c_currency_id=ccr.c_currency_id and ccr.c_currency_id_to=303
+  and a.dateinvoiced >= ccr.validfrom and a.dateinvoiced <= ccr.validto)
+left join c_conversion_rate ccr2 on ((select c_conversiontype_id from c_conversiontype where AD_Client_ID=1000007 and isDefault='Y')=ccr2.c_conversiontype_id and a.c_currency_id=ccr2.c_currency_id and ccr2.c_currency_id_to=303
+  and a.dateinvoiced >= ccr2.validfrom and a.dateinvoiced <= ccr2.validto)
+LEFT JOIN M_Product_Category mpc on (p.M_Product_Category_ID=mpc.M_Product_Category_ID)
+join c_doctype doctype on doctype.c_doctype_id = a.c_doctype_id and doctype.printname like '%AR%Pro%Forma%'
+join ad_org org on org.ad_org_id = a.ad_org_id
+join c_order co on co.c_order_id = a.c_order_id
+join c_orderline col on col.c_order_id = co.c_order_id and col.line = b.line
+where   a.issotrx = 'Y'
+and b.isprinted = 'Y'
+and a.docstatus in ('CO','CL')
+and trim(ti.documentno) is not null
+and a.ad_org_id = coalesce($P{AD_Org_ID},a.ad_org_id)
+and a.dateinvoiced >= coalesce($P{DateInvoiced1},a.dateinvoiced)
+and a.dateinvoiced <= coalesce($P{DateInvoiced2},a.dateinvoiced)
+group by a.documentno,case when g.c_greeting_id != 1000003 then g.name ||' '||c.name else c.name end, e.address1,
+          e.address2,
+          e.address3,
+          e.city||' '||coalesce(e.postal,''),
+c.taxid,
+b.qtyinvoiced,
+b.priceactual
+,b.description, a.c_invoice_id, a.dateinvoiced, d.name, e.c_location_id, b.c_invoiceline_id, p.value, p.name, p.description
+,ccr.multiplyrate, cc.iso_code, cc.c_currency_id, b.pricelist, cu.name, substring(ao.description, 5, 30), g.c_greeting_id, c.name
+,ccr2.multiplyrate
+,mpc.Value
+,mpc.m_product_category_id
+,col.qtyordered
+,org.name
+,org.AD_Client_ID
+,org.AD_Org_ID
+order by b.line
+)
+)
+order by  c_invoice_id,column1,line) z]]>
+	</queryString>
+	<field name="column1" class="java.lang.String"/>
+	<field name="column2" class="java.lang.String"/>
+	<field name="column3" class="java.lang.String"/>
+	<field name="column4" class="java.lang.String"/>
+	<field name="column5" class="java.lang.String"/>
+	<field name="column6" class="java.lang.String"/>
+	<field name="column7" class="java.lang.String"/>
+	<field name="column8" class="java.lang.String"/>
+	<field name="column9" class="java.lang.String"/>
+	<field name="column10" class="java.lang.String"/>
+	<field name="column11" class="java.lang.String"/>
+	<field name="column12" class="java.lang.String"/>
+	<field name="column13" class="java.lang.String"/>
+	<field name="column14" class="java.lang.String"/>
+	<field name="column15" class="java.lang.String"/>
+	<field name="column16" class="java.lang.String"/>
+	<field name="column17" class="java.lang.String"/>
+	<field name="column18" class="java.lang.String"/>
+	<field name="column19" class="java.lang.String"/>
+	<field name="column20" class="java.sql.Date"/>
+	<field name="column21" class="java.lang.String"/>
+	<field name="ad_client_id" class="java.math.BigDecimal"/>
+	<field name="ad_org_id" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="a56762f2-8aa7-4624-9012-10dd572d1abe" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement uuid="aa8ff315-3c68-477e-932e-3f5f1b0c57e7" stretchType="RelativeToTallestObject" x="100" y="0" width="100" height="20"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[$F{column2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="51008764-9aa9-48e4-ac3e-3a5d05327699" stretchType="RelativeToTallestObject" x="200" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column3}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c933aaf9-fd75-4d61-94d4-ecf7554d59cd" stretchType="RelativeToTallestObject" x="300" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column4}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="fd539b91-48d7-4809-8a58-7d13ecbfd280" stretchType="RelativeToTallestObject" x="400" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="13b114a4-bddb-4a08-bc38-eee59d511f25" stretchType="RelativeToTallestObject" x="500" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column6}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f2a9b380-0c9f-4293-b202-aeb274413395" stretchType="RelativeToTallestObject" x="600" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column7}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="afb48aba-82d7-4759-8166-fa683c3c0210" stretchType="RelativeToTallestObject" x="700" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column8}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="65265dcb-2a52-4aec-92dd-7594e2ca7c65" stretchType="RelativeToTallestObject" x="800" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column9}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="47744382-baea-4965-b8db-1712295815ee" stretchType="RelativeToTallestObject" x="900" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column10}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f8ca3e44-860d-4e70-8cfd-e26f6688939a" stretchType="RelativeToTallestObject" x="1000" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column11}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="45f52246-0fb4-4ef0-97f9-717750029128" stretchType="RelativeToTallestObject" x="1100" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column12}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="20442f38-248c-4bbf-9ff5-6a796e399027" stretchType="RelativeToTallestObject" x="1200" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column13}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="92cb3cf3-bdf6-44b3-9a05-f58b87e90233" stretchType="RelativeToTallestObject" x="1300" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column14}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="239d1674-0670-49c7-9976-ca2fbeef7a86" stretchType="RelativeToTallestObject" x="1400" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column15}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="d050001c-3f3f-4f7a-8bcb-ec5a4c0002a5" stretchType="RelativeToTallestObject" x="1500" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column16}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="41b2035a-b09c-4097-9fb3-3869992d7e85" stretchType="RelativeToTallestObject" x="1600" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column17}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2b1ef9aa-5a85-4942-9071-dd82cce2f119" stretchType="RelativeToTallestObject" x="1700" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column18}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="7fadfe08-32d0-44ee-818f-8cac50cacffc" stretchType="RelativeToTallestObject" x="1800" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{column19}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

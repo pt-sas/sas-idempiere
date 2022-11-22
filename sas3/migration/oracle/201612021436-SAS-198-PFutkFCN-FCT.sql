@@ -1,0 +1,12 @@
+-- Dec 2, 2016 2:17:28 PM WIT
+--  
+UPDATE C_DocType SET AD_PrintFormat_ID=1000080,Updated=TO_DATE('2016-12-02 14:17:27','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE C_DocType_ID=550294
+;
+
+-- Dec 2, 2016 2:17:34 PM WIT
+--  
+UPDATE C_DocType SET AD_PrintFormat_ID=1000080,Updated=TO_DATE('2016-12-02 14:17:34','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE C_DocType_ID=550293
+;
+
+SELECT register_migration_script('201612021436-SAS-198-PFutkFCN-FCT.sql') FROM dual
+;

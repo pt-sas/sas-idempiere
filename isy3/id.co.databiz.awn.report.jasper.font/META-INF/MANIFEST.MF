@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jasper Font
+Bundle-SymbolicName: id.co.databiz.awn.report.jasper.font
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: org.adempiere.report.jasper.library;bundle-version="2.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: arialuni.jar,
+ .

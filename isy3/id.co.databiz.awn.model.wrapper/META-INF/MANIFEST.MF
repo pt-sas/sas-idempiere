@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AWN Model Wrapper
+Bundle-SymbolicName: id.co.databiz.awn.model.wrapper
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: PT. Inovasi Databiz
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

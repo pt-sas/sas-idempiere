@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: AWN Test
+Bundle-SymbolicName: id.co.databiz.awn.test;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.adempiere.plugin.utils.AdempiereActivator
+Bundle-Vendor: PT. Inovasi Databiz
+Require-Bundle: org.adempiere.plugin.utils;bundle-version="0.0.0",
+ org.adempiere.base;bundle-version="1.0.0",
+ org.adempiere.ui.swing;bundle-version="1.0.0",
+ org.adempiere.ui.zk;bundle-version="1.0.0",
+ org.zkoss.zk.library;bundle-version="6.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: id.co.databiz.awn.test,
+ org.compiere.acct,
+ org.compiere.model

@@ -1,0 +1,87 @@
+-- Jan 23, 2015 6:54:38 PM WIT
+--  
+UPDATE AD_WF_Node SET IsActive='N',Updated=TO_DATE('2015-01-23 18:54:38','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:54:41 PM WIT
+--  
+UPDATE AD_WF_Node_Para SET IsActive='N',Updated=TO_DATE('2015-01-23 18:54:41','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_Para_ID=550004
+;
+
+-- Jan 23, 2015 6:54:43 PM WIT
+--  
+UPDATE AD_WF_Node_Para SET IsActive='N',Updated=TO_DATE('2015-01-23 18:54:43','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_Para_ID=550005
+;
+
+-- Jan 23, 2015 6:56:23 PM WIT
+--  
+DELETE FROM AD_WF_Node_Para WHERE AD_WF_Node_Para_ID=550004
+;
+
+-- Jan 23, 2015 6:56:23 PM WIT
+--  
+DELETE FROM AD_WF_Node_Para WHERE AD_WF_Node_Para_ID=550005
+;
+
+-- Jan 23, 2015 6:56:28 PM WIT
+--  
+DELETE  FROM  AD_WF_Node_Trl WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:56:28 PM WIT
+--  
+DELETE FROM AD_WF_Node WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:57:01 PM WIT
+--  
+UPDATE AD_WF_Node SET Action='Z', IsActive='Y',Updated=TO_DATE('2015-01-23 18:57:01','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:57:10 PM WIT
+--  
+UPDATE AD_WF_Node SET IsActive='N',Updated=TO_DATE('2015-01-23 18:57:10','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:57:32 PM WIT
+--  
+UPDATE AD_Workflow SET AD_Table_ID=NULL, IsActive='Y', IsValid='Y', WorkflowType='G',Updated=TO_DATE('2015-01-23 18:57:32','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Workflow_ID=550002
+;
+
+-- Jan 23, 2015 6:57:34 PM WIT
+--  
+UPDATE AD_Workflow SET IsActive='N', IsValid='Y',Updated=TO_DATE('2015-01-23 18:57:34','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Workflow_ID=550002
+;
+
+-- Jan 23, 2015 6:58:26 PM WIT
+--  
+UPDATE AD_Workflow SET IsActive='Y', IsValid='Y',Updated=TO_DATE('2015-01-23 18:58:26','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Workflow_ID=550002
+;
+
+-- Jan 23, 2015 6:58:33 PM WIT
+--  
+UPDATE AD_Workflow SET AD_WF_Node_ID=NULL, IsValid='N',Updated=TO_DATE('2015-01-23 18:58:33','YYYY-MM-DD HH24:MI:SS'),UpdatedBy=100 WHERE AD_Workflow_ID=550002
+;
+
+-- Jan 23, 2015 6:58:36 PM WIT
+--  
+DELETE  FROM  AD_WF_Node_Trl WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:58:36 PM WIT
+--  
+DELETE FROM AD_WF_Node WHERE AD_WF_Node_ID=550068
+;
+
+-- Jan 23, 2015 6:58:44 PM WIT
+--  
+DELETE  FROM  AD_Workflow_Trl WHERE AD_Workflow_ID=550002
+;
+
+-- Jan 23, 2015 6:58:44 PM WIT
+--  
+DELETE FROM AD_Workflow WHERE AD_Workflow_ID=550002
+;
+
+SELECT register_migration_script('201501231900-ISY-72-DelWfNewProduct.sql') FROM dual
+;

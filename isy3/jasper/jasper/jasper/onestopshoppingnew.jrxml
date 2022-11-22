@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="onestopshopping" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="683d4264-0e74-45c4-b758-fd8256e746d7">
+	<property name="ireport.zoom" value="1.0000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="C_Invoice_ID" class="java.math.BigDecimal">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/erp/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AD_User_Name" class="java.lang.String"/>
+	<parameter name="url_path" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select * from z_it_stop_shopping_invoice ss
+where ss.c_invoice_id=$P{C_Invoice_ID}
+and ss.docstatus in ('CO','CL')]]>
+	</queryString>
+	<field name="ad_client_id" class="java.math.BigDecimal"/>
+	<field name="ad_org_id" class="java.math.BigDecimal"/>
+	<field name="c_invoice_id" class="java.math.BigDecimal"/>
+	<field name="invoiceno" class="java.lang.String"/>
+	<field name="completeddate" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="value" class="java.lang.String"/>
+	<field name="bp_name" class="java.lang.String"/>
+	<field name="grandtotal" class="java.math.BigDecimal"/>
+	<field name="dateinvoiced" class="java.sql.Timestamp"/>
+	<field name="docstatus" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="107" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="89376000-bede-48e4-8506-72bd6ed0059f" x="316" y="40" width="87" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Tgl Faktur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e12cf1d0-e5e9-4415-a0af-53a802fcbb8f" x="1" y="5" width="554" height="35"/>
+				<textElement textAlignment="Center">
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[HISTORY FAKTUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b88616f8-04f7-443a-99ad-ccadecaee94e" x="1" y="80" width="89" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Nilai Faktur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="66bde8e5-9780-4a2b-865e-0c6c9431e51a" x="1" y="60" width="89" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Nama Customer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c1d075c1-8a24-4ba0-a336-d4d95ee5e93b" x="316" y="60" width="87" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Tgl Komplit]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a6783d74-8448-4f64-914f-9dca58f92b19" x="94" y="40" width="164" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{invoiceno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cc9ecf9b-77d1-48b2-af20-a52b96b49571" x="1" y="40" width="89" height="20"/>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[No Faktur]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b66729cb-2a67-4382-be2c-f00893e87206" x="89" y="40" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69a8f059-20af-4e94-8c0f-eb240fdc2f36" x="89" y="60" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="1b0208ff-21f0-4807-8fcb-3d8bcbd06552" x="94" y="80" width="164" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[$F{grandtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a3e048d9-8817-4095-8ed5-55d0e7bd9a45" x="94" y="60" width="164" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bp_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy">
+				<reportElement uuid="19490cc7-02d1-415e-a697-431014f3cf35" x="408" y="40" width="147" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dateinvoiced}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3ffdf90f-c461-40d2-8e71-ba7eaad26697" x="89" y="80" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d159f4b1-ecb2-4337-b020-9f3b8b38fac2" x="403" y="60" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="3e9eeaac-0da9-4361-b266-610b452b5127" x="408" y="60" width="147" height="40"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{completeddate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="27f9021e-77d6-44c2-9f57-7795bbb22b54" x="403" y="40" width="5" height="20"/>
+				<textElement/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9b5bedb1-16d4-41cd-814d-42ac4a23a935" x="1" y="5" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{AD_User_Name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy h.mm a">
+				<reportElement uuid="c1df330c-684f-4438-82ae-2a3954066e01" x="455" y="5" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="dd21604f-9a6a-475c-94b6-738293afe6f4" x="0" y="1" width="555" height="22"/>
+				<subreportParameter name="C_Invoice_ID">
+					<subreportParameterExpression><![CDATA[$F{c_invoice_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "onestopshoppingshipment.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="23">
+			<subreport>
+				<reportElement uuid="f6237b0a-2533-4571-8ffa-ce70f0d4b424" x="0" y="0" width="555" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="C_Invoice_ID">
+					<subreportParameterExpression><![CDATA[$F{c_invoice_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "onestopshoppinglkf.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="23">
+			<subreport>
+				<reportElement uuid="a39fbfe0-a2cd-434e-a4b0-5a05fc0fa8b4" x="0" y="0" width="555" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="C_Invoice_ID">
+					<subreportParameterExpression><![CDATA[$F{c_invoice_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "onestopshoppingdto.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="23">
+			<subreport>
+				<reportElement uuid="73ee6999-af74-4def-aad7-c8435a535247" x="0" y="0" width="555" height="22"/>
+				<subreportParameter name="C_Invoice_ID">
+					<subreportParameterExpression><![CDATA[$F{c_invoice_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "onestopshoppingallocation.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>
