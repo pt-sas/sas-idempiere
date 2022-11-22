@@ -1,2 +1,2 @@
-# sas-idempiere
-iDempiere ERP v.3.1
+# iDempiere ERP v.3.1
+SAS iDempiere ERP v.3.1
