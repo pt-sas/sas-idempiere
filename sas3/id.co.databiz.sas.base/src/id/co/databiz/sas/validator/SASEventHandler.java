@@ -348,7 +348,7 @@ public class SASEventHandler extends AbstractEventHandler {
 								pp.setM_PriceList_Version_ID(M_PriceList_Version_ID);
 								pp.setPriceDate(orderDate);
 								
-								if (line.getPriceList().compareTo(pp.getPriceList()) < 0) {
+								if (line.getPriceList().compareTo(pp.getPriceStd()) < 0) {
 									throw new AdempiereUserError("Line " + line.getLine() + 
 											": List Price [" + line.getPriceList() + 
 											"] is lower than standard [" + pp.getPriceList() + "]");
